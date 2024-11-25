@@ -54,3 +54,17 @@ export const createUser = async (
     const user = await getUserById(newId);
     return user;
 }
+
+export const getUserById = async (id) => {
+    let ids = new ObjectId();
+    if (!id) throw 'You must provide an id to search for';
+    if (typeof id !== 'string') throw 'Id must be a string';
+    if (id.trim().length === 0) throw 'Id cannot be an empty string or just spaces';
+    id = id.trim();
+    if (!ObjectId.isValid(id)) throw 'invalid object ID';
+    const userCollection = await users();
+    const user = await userCollection.findOne({_id: new ObjectId(id)});
+    if (user === null) throw 'No user with that id';
+    user._id = user._id.toString();
+    return user;
+}
