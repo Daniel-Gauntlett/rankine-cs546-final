@@ -19,7 +19,9 @@ try
         null, true, "6744b2de7d63b9e12950d9d3", 2,
         "6744b30707e6c26e2ef42c9a", [], ["6744b325694adc1370a267e0"], "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyOBFRML09gNsjdrpsbp0TxbSaQ95AOy-fIw&s"
     );
-    console.log(await events.getAllEvents())
+    console.log(await events.getAllEvents());
+    console.log(await events.removeEvent(event1._id.toString()));
+    console.log(await events.getAllEvents());
 }
 catch(e)
 {

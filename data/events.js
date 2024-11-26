@@ -79,7 +79,7 @@ export const getEventByID = async (id) => {
     if (!ObjectId.isValid(id)) throw 'invalid object ID';
     const eventCollection = await events();
     const event = await eventCollection.findOne({_id: new ObjectId(id)});
-    if (event === null) throw 'No team with that id';
+    if (event === null) throw 'No event with that id';
     event._id = event._id.toString();
     return event;
   };
@@ -89,10 +89,30 @@ export const getAllEvents = async () => {
         .find({})
         .project({_id: 1, name: 1})
         .toArray();
-    if (!eventList) throw 'Could not get all teams';
+    if (!eventList) throw 'Could not get all events';
     for(let event of eventList)
     {
         event._id = event._id.toString();
     }
     return eventList;
 }
+
+export const removeEvent = async (id) => {
+    if (!id) throw 'You must provide an id to search for';
+    if (typeof id !== 'string') throw 'Id must be a string';
+    if (id.trim().length === 0)
+      throw 'id cannot be an empty string or just spaces';
+    id = id.trim();
+    if (!ObjectId.isValid(id)) throw 'invalid object ID';
+    const eventCollection = await events();
+    const deletionInfo = await eventCollection.findOneAndDelete({
+      _id: new ObjectId(id)
+    });
+  
+    if (!deletionInfo) {
+      throw `Could not delete event with id of ${id}`;
+    }
+    //{"_id": "507f1f77bcf86cd799439011", "deleted": true}
+    return deletionInfo._id;
+  };
+  
