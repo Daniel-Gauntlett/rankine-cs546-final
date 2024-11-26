@@ -22,6 +22,11 @@ try
     console.log(await events.getAllEvents());
     console.log(await events.removeEvent(event1._id.toString()));
     console.log(await events.getAllEvents());
+    console.log(await events.updateEvent(event2._id, "Party For PHI", "Join the the Party!",
+        new Date("November 10, 2024 20:00:00 EST").toJSON(), new Date("November 10, 2024 22:00:00 EST").toJSON(), false,
+        null, true, "6744b2de7d63b9e12950d9d3", 2,
+        "6744b30707e6c26e2ef42c9a", [], ["6744b325694adc1370a267e0"], "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyOBFRML09gNsjdrpsbp0TxbSaQ95AOy-fIw&s"
+    ));
 }
 catch(e)
 {
