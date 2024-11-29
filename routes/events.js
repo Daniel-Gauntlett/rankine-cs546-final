@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import { createEvent, getAllEvents, getEventByID, removeEvent, updateEvent } from '../data/events';
-import helpers from "../helpers.js";
+import * as helpers from '../helpers.js';
 const router = Router();
 router.route('/').post(async (req, res) => {
     let eventData = req.body;
@@ -9,7 +9,23 @@ router.route('/').post(async (req, res) => {
         .status(400)
         .json({error: 'There are no fields in the request body'});
     }
-    //error checking here
+    try {
+      await helpers.checkCreateEvent(eventData.name,
+        eventData.description,
+        eventData.startDate,
+        eventData.endDate,
+        eventData.isRecurring,
+        eventData.recurUntil,
+        eventData.isPrivate,
+        eventData.roomID,
+        eventData.status,
+        eventData.organizerID,
+        eventData.rsvpList,
+        eventData.attendeesList,
+        eventData.picture)
+    } catch (e) {
+      return res.status(400).json({error: e});
+    }
     try {
         const newEvent = await createEvent(
             eventData.name,
@@ -79,7 +95,24 @@ router.route('/:id').put(async (req, res) => {
         .status(400)
         .json({error: 'There are no fields in the request body'});
     }
-    //error checking here
+    try {
+      await helpers.checkUpdateEvent(req.params.id, 
+        eventData.name,
+        eventData.description,
+        eventData.startDate,
+        eventData.endDate,
+        eventData.isRecurring,
+        eventData.recurUntil,
+        eventData.isPrivate,
+        eventData.roomID,
+        eventData.status,
+        eventData.organizerID,
+        eventData.rsvpList,
+        eventData.attendeesList,
+        eventData.picture)
+    } catch (e) {
+      return res.status(400).json({error: e});
+    }
     try {
         const updatedEvent = await updateEvent(
             req.params.id,
