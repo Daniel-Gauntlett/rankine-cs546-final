@@ -113,7 +113,7 @@ export const updateEvent = async (
   ) => {
     
     try {
-      await helpers.checkUpdateEvent(name,description,startDate,endDate,isRecurring,recurUntil,isPrivate,roomID,status,organizerID,rsvpList,attendeesList,picture);    } catch (e) {
+      await helpers.checkUpdateEvent(id,name,description,startDate,endDate,isRecurring,recurUntil,isPrivate,roomID,status,organizerID,rsvpList,attendeesList,picture);    } catch (e) {
       throw e;
     }
     let newEvent = {

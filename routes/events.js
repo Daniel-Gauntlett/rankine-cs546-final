@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { createEvent, getAllEvents, getEventByID, removeEvent, updateEvent } from '../data/events';
+import { createEvent, getAllEvents, getEventByID, removeEvent, updateEvent } from '../data/events.js';
 import * as helpers from '../helpers.js';
 const router = Router();
 router.route('/').post(async (req, res) => {
