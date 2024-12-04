@@ -5,6 +5,15 @@ export const checkString = (data, name) =>
     if(typeof data !== "string" || (data = data.trim()).length === 0) throw  `${name} isn't a valid non-empty string`;
     return data.trim();
 };
+
+export const checkArrayOfStrings = (data, name) =>
+{
+    for(let string of data){
+        string = checkString(string, name)
+    }
+    return data
+};
+
 export const checkIsValidDate = (data, name) =>
 {
     let date = checkString(data, name);
@@ -96,3 +105,31 @@ export const checkCreateEvent = async (
         throw e;
     }
   }
+
+export const checkCreateRoom = async (
+    building,
+    roomNumber,
+    roomCapacity,
+    roomFeatures,
+    unavaliableTimes,
+    roomPicture
+    ) => {
+    if(!building) throw "Building name not given";
+    building = checkString(building, "Building");
+
+    if(!roomNumber) throw "Room Number not given";
+    roomNumber = checkString(roomNumber, "Room Number")
+
+    if(!roomCapacity) throw "Room capacity not given";
+    roomCapacity = checkString(roomCapacity, "Room Capacity")
+
+    if(!roomFeatures) throw "Room features not given";
+    roomFeatures = checkArrayOfStrings(roomFeatures, "Room Features")
+
+    if(!unavaliableTimes) throw "Times not given";
+    //Check to see if times list is valid
+
+    if(!roomPicture) throw "Picture URL not given"
+    roomPicture = checkString(roomPicture, "Room Picture")
+
+}

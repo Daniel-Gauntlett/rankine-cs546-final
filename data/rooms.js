@@ -9,18 +9,24 @@ export const createRoom = async (
     roomNumber,
     roomCapacity,
     roomFeatures,
-    rooms,
     unavaliableTimes,
     roomPicture
   ) => {
     try {
-      await helpers.checkCreateRoom(roomID,building,roomNumber,roomCapacity,roomFeatures,rooms,unavaliableTimes,roomPicture);
+      await helpers.checkCreateRoom(roomID,building,roomNumber,roomCapacity,roomFeatures,unavaliableTimes,roomPicture);
     }
     catch (e) {
       throw e;
     }
+    let events = {}
     let newroom = {
-      
+      building,
+      roomNumber,
+      roomCapacity,
+      roomFeatures,
+      events,
+      unavaliableTimes,
+      roomPicture
     };
     const rooomCollection = await rooms();
     const insertInfo = await roomCollection.insertOne(newRoom);
@@ -40,17 +46,17 @@ export const updateRoom = async (
     roomNumber,
     roomCapacity,
     roomFeatures,
-    rooms,
+    events,
     unavaliableTimes,
     roomPicture
   ) => {
     
     try {
-      await helpers.checkUpdateRoom(roomID,building,roomNumber,roomCapacity,roomFeatures,rooms,unavaliableTimes,roomPicture);    } catch (e) {
+      await helpers.checkUpdateRoom(roomID,building,roomNumber,roomCapacity,roomFeatures,events,unavaliableTimes,roomPicture);    } catch (e) {
       throw e;
     }
     let newRoom = {
-        building,roomNumber,roomCapacity,roomFeatures,rooms,unavaliableTimes,roomPicture
+        building,roomNumber,roomCapacity,roomFeatures,events,unavaliableTimes,roomPicture
     };
     const roomCollection = await rooms();
     const updatedInfo = await roomCollection.findOneAndUpdate(
