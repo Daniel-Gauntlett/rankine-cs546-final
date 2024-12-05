@@ -65,3 +65,39 @@ export const removeUser = async (id) => {
     }
     return deletionInfo._id;
 }
+
+export const updateUser = async (
+    id,
+    userID,
+    username,
+    userPassword,
+    firstName,
+    lastName,
+    permissions,
+    beingGranted,
+    usersApproving,
+    notifications
+) => {
+    let idtest = helpers.checkIsValidID(id, "id");
+    let test = helpers.checkCreateUser(userID, username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
+    let newUser = {
+        userID,
+        username,
+        userPassword,
+        firstName,
+        lastName,
+        permissions,
+        beingGranted,
+        usersApproving,
+        notifications 
+    }
+    const userCollection = await users();
+    const updatedInfo = await userCollection.findOneAndUpdate(
+        {_id: new ObjectId(id)},
+        {$set: newUser},
+        {returnDocument: 'after'}
+    );
+    if (!updatedInfo) throw 'could not update event successfully';
+    updatedInfo._id = updatedInfo._id.toString();
+    return updatedInfo;
+}
