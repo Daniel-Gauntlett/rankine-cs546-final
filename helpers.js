@@ -14,6 +14,36 @@ export const checkArrayOfStrings = (data, name) =>
     return data
 };
 
+export const isDate = (obj) => 
+{
+    return obj instanceof Date;
+}
+
+export const checkDateArray = (data, name) =>
+{
+    if(!data) throw `${name} isn't a valid non-empty string`;
+    if(!Array.isArray(data) && data.length < 3) throw  `${name} isn't a valid date array`;
+    // first value is a date
+    if(!isDate(data[0])) throw `${name} isn't a valid date array`
+    // second value is a date
+    if(!isDate(data[1])) throw `${name} isn't a valid date array`
+    // third value is a boolean
+    if(typeof(data[2]) !== "boolean") throw `${name} isn't a valid date array`
+    // fourth value is a date, and only exists if the third value is true
+    if(data[2]){
+        if(!isDate(data[3])) throw `${name} isn't a valid date array`
+    }
+    return 0
+};
+
+export const checkDateArrayArray = (data, name) =>
+{
+    for(let array of data){
+        checkDateArray(array, name)
+    }
+    return data
+}
+
 export const checkIsValidDate = (data, name) =>
 {
     let date = checkString(data, name);
@@ -127,7 +157,7 @@ export const checkCreateRoom = async (
     roomFeatures = checkArrayOfStrings(roomFeatures, "Room Features")
 
     if(!unavaliableTimes) throw "Times not given";
-    //Check to see if times list is valid
+    unavaliableTimes = checkDateArrayArray(unavaliableTimes, "Date Array")
 
     if(!roomPicture) throw "Picture URL not given"
     roomPicture = checkString(roomPicture, "Room Picture")
