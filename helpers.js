@@ -57,7 +57,9 @@ export const checkCreateEvent = (
     if(!attendeesList) throw "No attendees list is given for event";
     if(!picture) throw "No picture is given for event";
     name = checkString(name, "Name");
+    if(name.length>50 || name.length<3) throw "Event name should be between 3 and 50 characters";
     description = checkString(description, "Description");
+    if(description.length<25 || description.length > 225) throw "Description name should be between 25 and 225 characters.";
     startDate = checkIsValidDate(startDate, "Start date");
     endDate = checkIsValidDate(endDate, "End date");
     if(new Date(endDate) < new Date(startDate)) throw "The end date is before the start date";
