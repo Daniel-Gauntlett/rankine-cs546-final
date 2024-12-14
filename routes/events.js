@@ -81,7 +81,7 @@ router.route('/:id').delete(async (req, res) => {
         return res.status(400).json({error: e});
       }
       try {
-        let deletedTeam = await removeEvent(req.params.id);
+        await removeEvent(req.params.id);
       return res.json({deleted: true,_id: req.params.id});
     } catch (e) {
         return res.status(404).json(e);
