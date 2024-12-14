@@ -45,7 +45,7 @@ router.route('/').post(async (req, res) => {
         return res.json(newEvent);
       } catch (e) {
         console.log(e);
-        return res.sendStatus(500);
+        return res.status(500).json({error: e});
       }
 });
 
@@ -133,7 +133,7 @@ router.route('/:id').put(async (req, res) => {
         return res.json(updatedEvent);
       } catch (e) {
         console.log(e);
-        return res.sendStatus(500);
+        return res.status(500).json({error: e});
       }
 });
 
