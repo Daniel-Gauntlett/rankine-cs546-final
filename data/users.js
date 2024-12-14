@@ -33,7 +33,7 @@ export const createUser = async (
 }
 
 export const getUserById = async (id) => {
-    let idtest = helpers.checkIsValidID(id, "id");
+    id = helpers.checkIsValidID(id, "id");
     const userCollection = await users();
     const user = await userCollection.findOne({_id: new ObjectId(id)});
     if (user === null) throw 'No user with that id';
@@ -55,7 +55,7 @@ export const getAllUsers = async () => {
 }
 
 export const removeUser = async (id) => {
-    let idtest = helpers.checkIsValidID(id, "id");
+    id = helpers.checkIsValidID(id, "id");
     const userCollection = await users();
     const deletionInfo = await userCollection.findOneAndDelete({
         _id: new ObjectId(id)
@@ -78,7 +78,7 @@ export const updateUser = async (
     usersApproving,
     notifications
 ) => {
-    let idtest = helpers.checkIsValidID(id, "id");
+    id = helpers.checkIsValidID(id, "id");
     let test = helpers.checkCreateUser(userID, username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
     let newUser = {
         userID,
