@@ -12,30 +12,7 @@ export const createUser = async (
     usersApproving,
     notifications
 ) => {
-    if (!userID) throw "No User ID given";
-    if (!username) throw "No username given for the user";
-    if (!userPassword) throw "No password given for the user";
-    if (!firstName) throw "No first name given for the user";
-    if (!lastName) throw "No last name given for the user";
-    if (!permissions) throw "No permissions supplied for the user";
-    if (!beingGranted) throw "No being granted status given for the user";
-    if (!usersApproving) throw "No users approving array provided for the user";
-    if (!notifications) throw "No notifications array provided for the user";
-    userID = helpers.checkIsValidID(userID, "User ID");
-    username = helpers.checkString(username, "Username");
-    userPassword = helpers.checkString(userPassword, "Password");
-    firstName = helpers.checkString(firstName, "First Name");
-    lastName = helpers.checkString(lastName, "Last Name");
-    if (permissions !== 0 && permissions !== 1 && permissions !== 2) throw "Permissions is not a valid integer";
-    if (typeof beingGranted !== "boolean") throw "Boolean not provided for being granted status";
-    if (!Array.isArray(usersApproving)) throw "Given users approving list is not an array";
-    for (let i = 0; i < usersApproving.length; i++){
-        let testval = helpers.checkIsValidID(usersApproving[i], "Administrator Account ID");
-    }
-    if (!Array.isArray(notifications)) throw "Given notifications is not an array";
-    for (let i = 0; i < notifications.length; i++){
-        let testval = helpers.checkString(notifications[i], "Notification");
-    }
+    let test = helpers.checkCreateUser(userID, username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
     let newUser = {
         userID,
         username,
@@ -56,15 +33,71 @@ export const createUser = async (
 }
 
 export const getUserById = async (id) => {
-    let ids = new ObjectId();
-    if (!id) throw 'You must provide an id to search for';
-    if (typeof id !== 'string') throw 'Id must be a string';
-    if (id.trim().length === 0) throw 'Id cannot be an empty string or just spaces';
-    id = id.trim();
-    if (!ObjectId.isValid(id)) throw 'invalid object ID';
+    let idtest = helpers.checkIsValidID(id, "id");
     const userCollection = await users();
     const user = await userCollection.findOne({_id: new ObjectId(id)});
     if (user === null) throw 'No user with that id';
     user._id = user._id.toString();
     return user;
+}
+
+export const getAllUsers = async () => {
+    const userCollection = await users();
+    let userList = await userCollection
+        .find({})
+        .project({_id: 1, name: 1})
+        .toArray();
+    if (!userList) throw 'Could not get all users';
+    for (let user of userList){
+        user._id = user._id.toString();
+    }
+    return userList;
+}
+
+export const removeUser = async (id) => {
+    let idtest = helpers.checkIsValidID(id, "id");
+    const userCollection = await users();
+    const deletionInfo = await userCollection.findOneAndDelete({
+        _id: new ObjectId(id)
+    });
+    if (!deletionInfo) {
+        throw `Could not delete user with id of ${id}`;
+    }
+    return deletionInfo._id;
+}
+
+export const updateUser = async (
+    id,
+    userID,
+    username,
+    userPassword,
+    firstName,
+    lastName,
+    permissions,
+    beingGranted,
+    usersApproving,
+    notifications
+) => {
+    let idtest = helpers.checkIsValidID(id, "id");
+    let test = helpers.checkCreateUser(userID, username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
+    let newUser = {
+        userID,
+        username,
+        userPassword,
+        firstName,
+        lastName,
+        permissions,
+        beingGranted,
+        usersApproving,
+        notifications 
+    }
+    const userCollection = await users();
+    const updatedInfo = await userCollection.findOneAndUpdate(
+        {_id: new ObjectId(id)},
+        {$set: newUser},
+        {returnDocument: 'after'}
+    );
+    if (!updatedInfo) throw 'could not update event successfully';
+    updatedInfo._id = updatedInfo._id.toString();
+    return updatedInfo;
 }
