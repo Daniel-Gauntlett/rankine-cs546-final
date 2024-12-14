@@ -136,6 +136,27 @@ router.route('/:id').put(async (req, res) => {
         return res.sendStatus(500);
       }
 });
-
+router.route('/:id').patch(async (req, res) => {
+    let eventData = req.body;
+    if (!eventData || Object.keys(eventData).length === 0) {
+      return res
+        .status(400)
+        .json({error: 'There are no fields in the request body'});
+    }
+    try {
+      await helpers.checkPatchUser(req.params.id, (await getUserById(req.params.id)), req.body)
+    } catch (e) {
+      return res.status(400).json({error: e});
+    }
+    try {
+        const patchedEvent = await patchUser(
+            req.params.id, req.body
+        );
+        return res.json(patchedEvent);
+      } catch (e) {
+        console.log(e);
+        return res.sendStatus(500);
+      }
+});
 
 export default router;
