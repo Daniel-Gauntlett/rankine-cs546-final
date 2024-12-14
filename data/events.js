@@ -46,7 +46,7 @@ export const getAllEvents = async () => {
     const eventCollection = await events();
     let eventList = await eventCollection
         .find({})
-        .project({_id: 1, name: 1})
+        // .project({_id: 1, name: 1})
         .toArray();
     if (!eventList) throw 'Could not get all events';
     for(let event of eventList)
