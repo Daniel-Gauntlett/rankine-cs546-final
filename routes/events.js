@@ -66,8 +66,8 @@ router.route('/:id').get(async (req, res) => {
 
 router.route('/').get(async (req, res) => {
     try {
-        const teamlist = await getAllEvents();
-        return res.json(teamlist);
+        const eventslist = await getAllEvents();
+        return res.render('./eventlist', {title: "Events List", events: eventslist})
       } catch (e) {
         return res.status(500).send(e);
       }
