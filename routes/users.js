@@ -89,7 +89,7 @@ router
 
 router.route('/signoutuser').get(async (req, res) => {
   req.session.destroy();
-  res.redirect('/users/signinuser');
+  res.redirect('/signinuser');
 });
 
 router.route('/user/:id').get(async (req, res) => {

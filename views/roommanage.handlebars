@@ -1,0 +1,14 @@
+
+<p id="room">Building: {{building}},
+Room #: {{roomNumber}},
+Room Capacity: {{roomCapacity}},
+Room Features: {{roomFeatures}},
+Events: {{events}},
+Unavailable Times: {{unavailableTimes}},
+Room Picture: {{roomPicture}}</p>
+<form action="/patchRoom" method="POST" id="patchRoom">
+    <button type="submit" name="edit_button" id="edit_button">Edit Room</button>
+</form>
+<form action="/deleteRoom" method="POST" id="patchRoom">
+    <button type="submit" name="delete_button" id="delete_button">Delete Room</button>
+</form>

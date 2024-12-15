@@ -39,14 +39,19 @@ app.get('/users', (req, res, next) => {
   else if(req.originalUrl === "/users" || req.originalUrl === "/users/" && req.session.user.permissions !== 2) res.status(403).render('./error', {Title: "Error", error: "Don't have permission to view the page"});
   else next();
 });
-app.get('/users/user/signinuser', (req,res,next) => {
+app.get('/users/signinuser', (req,res,next) => {
   if(req.session.user) res.redirect(`/`);
   else next();
 });
-app.get('/signoutuser', (req, res, next) => {
-  if(!req.session.user) res.redirect("/users/user/signinuser");
+app.get('/users/signoutuser', (req, res, next) => {
+  if(!req.session.user) res.redirect("/users/signinuser");
   else next();
 });
+app.get('/users/user/:id', (req, res, next) => {
+  if(!req.session.user) res.redirect("/users/signinuser");
+  else if(req.session.user.username !== req.params.id && req.session.user.permissions !== 2) res.status(403).render('./error', {Title: "Error", error: "Don't have permission to view the page"});
+  else next();
+}) 
 configRoutes(app);
 app.listen(3000, () => {
   console.log("We've now got a server!");
