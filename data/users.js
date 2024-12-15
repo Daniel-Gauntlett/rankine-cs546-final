@@ -1,6 +1,8 @@
 import {users} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 import * as helpers from '../helpers.js';
+import bcrypt from 'bcrypt';
+
 export const createUser = async (
     username,
     userPassword,
@@ -133,4 +135,52 @@ export const updateNotifications = async (
     };
     let value = patchUser(id, notifObject);
     return notifObject;
+}
+
+export const signUpUser = async (
+    username,
+    userPassword,
+    firstName,
+    lastName,
+  ) => {
+    let testval = helpers.checkSignUpUser(username, userPassword, firstName, lastName);
+    let userCollection = await users();
+    let dupeuser = await userCollection.findOne({username: username});
+    if (dupeuser !== null) throw "Duplicate username was found, please use a different one.";
+    let newUser = {
+        username: username,
+        userPassword: userPassword,
+        firstName: firstName,
+        lastName: lastName,
+        permissions: 0,
+        beingGranted: false,
+        usersApproving: [],
+        notifications: []
+    }
+    let insertInfo = await userCollection.insertOne(newUser);
+    if (!insertInfo.acknowledged || !insertInfo.insertedId){
+      throw "Could not add user";
+    }
+    let newId = insertInfo.insertedId.toString();
+    return {registrationCompleted: true}; 
+  };
+
+export const signInUser = async (username, userPassword) => {
+    let testval = helpers.checkSignInUser(username, userPassword);
+    let userCollection = await users();
+    let user = await userCollection.findOne({username: username});
+    if (!user) throw "Either the username or password is invalid";
+    let userPass = user.password;
+    let truthval = await bcrypt.compare(password, userPass);
+    if (truthval){
+      let userFields = {
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        permissions: user.permissions,
+        notifications: user.notifications
+      }
+      return userFields;
+    }
+    throw "Either the username or password is invalid";  
 }
