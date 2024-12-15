@@ -27,10 +27,12 @@ app.use('/', (req, res, next) => {
     next();
 });
 app.get('/events/', (req, res, next) => {
-  next();
+  if(!req.session.user) res.redirect("/users/user/signinuser");
+  else next();
 });
 app.get('rooms/', (req, res, next) => {
-  next();
+  if(!req.session.user) res.redirect("/users/user/signinuser");
+  else next();
 });
 app.get('/users', (req, res, next) => {
   if(req.originalUrl === "/users" || req.originalUrl === "/users/" && !req.session.user) res.redirect('/users/signinuser');
