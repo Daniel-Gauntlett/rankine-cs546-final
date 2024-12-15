@@ -37,7 +37,7 @@ app.get('/users', (req, res, next) => {
   else if(req.originalUrl === "/users" || req.originalUrl === "/users/" && req.session.user.permissions !== 2) res.status(403).render('./error', {Title: "Error", error: "Don't have permission to view the page"});
   else next();
 });
-app.get('/users/signinuser', (req,res,next) => {
+app.get('/users/user/signinuser', (req,res,next) => {
   if(req.session.user) res.redirect(`/`);
   else next();
 });
