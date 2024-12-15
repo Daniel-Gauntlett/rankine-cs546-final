@@ -92,7 +92,7 @@ router.route('/signoutuser').get(async (req, res) => {
   res.redirect('/users/signinuser');
 });
 
-router.route('/:id').get(async (req, res) => {
+router.route('/user/:id').get(async (req, res) => {
     try {
         helpers.checkString(req.params.id, "ID");
         helpers.checkIsValidID(req.params.id, "ID");
