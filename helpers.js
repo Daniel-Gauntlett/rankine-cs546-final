@@ -66,7 +66,7 @@ export const checkIsValidIDs = (data, name) =>
     }
     return data;
 }
-export const checkIsValidPassword = async (password, saltRounds) =>
+export const checkIsValidPassword = (password, saltRounds) =>
 {
   password = checkString(password, "Given password");
   let passtest1 = false;
@@ -83,9 +83,9 @@ export const checkIsValidPassword = async (password, saltRounds) =>
     passtest1 = true;
   }
   else{
-    throw "Given password is invalid.";
+    throw "Given password is invalid, must include an uppercase character, a special character, and a number.";
   }
-  let hash = await bcrypt.hash((passwordVal, saltRounds));
+  let hash = bcrypt.hash((passwordVal, saltRounds));
   return hash;
 }
 
@@ -275,7 +275,7 @@ export const checkPatchUser = (
     if(!updateObject) throw "No update object given for user";
     id = checkIsValidID(id, "User ID");
     if ('username' in updateObject) updateObject.username = checkString(updateObject.username);
-    if ('username' in updateObject && (updateObject.username.length < 5 || updateObject.username.length > 10)) throw "Given username is incorrect length";
+    if ('username' in updateObject && (updateObject.username.length < 5 || updateObject.username.length > 10)) throw "Given username is incorrect length, must be between 5-10 characters.";
     if ('userPassword' in updateObject) updateObject.userPassword = checkIsValidPassword(userPassword, 8);
     if ('userPassword' in updateObject && originalUser.userPassword === updateObject.userPassword) throw "Given updated password needs to be different";
     if ('firstName' in updateObject) updateObject.firstName = checkString(updateObject.firstName);
@@ -298,6 +298,35 @@ export const checkPatchUser = (
     }
     return updateObject;
   }
+
+export const checkSignUpUser = (
+  username,
+  userPassword,
+  firstName,
+  lastName
+  ) => {
+    if (!username) throw "No username given";
+    if (!userPassword) throw "No password given";
+    if (!firstName) throw "No first name given";
+    if (!lastName) throw "No last name given";
+    username = checkString(username, "Given first name");
+    if (username.length < 5 || firstName.length > 10) throw "Given username is incorrect length, must be between 5-10 characters.";
+    userPassword = checkIsValidPassword(userPassword, 8);
+    firstName = checkString(firstName, "Given first name");
+    if (firstName.length < 2 || firstName.length > 25) throw "Given first name is incorrect length";
+    lastName = checkString(lastName, "Given last name");
+    if (lastName.length < 2 || lastName.length > 25) throw "Given last name is incorrect length";
+    return true;
+}
+
+export const checkSignInUser = (username, userPassword) => {
+    if (!username) throw "No username given";
+    if (!userPassword) throw "No password given";
+    username = checkString(username, "Given first name");
+    if (username.length < 5 || firstName.length > 10) throw "Given username is incorrect length, must be between 5-10 characters.";
+    userPassword = checkIsValidPassword(userPassword, 8);
+    return true;
+}
 
 export const checkCreateRoom = async (
     building,
