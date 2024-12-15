@@ -1,9 +1,17 @@
 import {Router} from 'express';
 import * as helpers from '../helpers.js';
-import { createRoom, getRoomByID, removeRoom } from '../data/rooms.js';
+import { createRoom, getAllRooms, getRoomByID, removeRoom } from '../data/rooms.js';
 const router = Router();
 
-router.route('/').post(async (req, res) => {
+router.route('/').get(async (req, res) => {
+  try {
+      const roomList = await getAllRooms();
+      return res.render('./roomlist', {title: "Room List", events: roomList})
+    } catch (e) {
+      return res.status(500).send(e);
+    }
+})
+.post(async (req, res) => {
     let roomData = req.body;
     if (!roomData || Object.keys(roomData).length === 0) {
       return res
@@ -11,7 +19,8 @@ router.route('/').post(async (req, res) => {
         .json({error: 'There are no fields in the request body'});
     }
     try {
-      await helpers.checkCreateRoom() // I need dray
+      await helpers.checkCreateRoom(roomData.roomID,roomData.building,roomData.roomNumber,roomData.roomCapacity,roomData.roomFeatures,roomData.unavailableTimesList,roomData.roomPicture) // I need dray
+      unavailableTimes = calculateUnavailableTimes(unavailableTimesList)
     } catch (e) {
       return res.status(400).json({error: e});
     }
@@ -38,14 +47,12 @@ router.route('/:id').get(async (req, res) => {
         return res.status(400).json({error: e});
     }
     try {
-        const user = await getRoomByID(req.params.id);
-        return res.json(user);
+        const room = await getRoomByID(req.params.id);
+        return res.render('roommmanage',room);
     } catch (e) {
         return res.status(404).json(e);
     }
-});
-
-router.route('/:id').delete(async (req, res) => {
+}).delete(async (req, res) => {
     try {
         helpers.checkString(req.params.id, "ID");
         helpers.checkIsValidID(req.params.id, "ID");
@@ -58,36 +65,34 @@ router.route('/:id').delete(async (req, res) => {
     } catch (e) {
         return res.status(404).json(e);
     }
-});
-
-router.route('/:id').put(async (req, res) => {
-    let roomData = req.body;
-    if (!roomData || Object.keys(roomData).length === 0) {
-      return res
-        .status(400)
-        .json({error: 'There are no fields in the request body'});
-    }
-    try {
-      await helpers.checkCreateUser() //i need dray
+}).put(async (req, res) => {
+  let roomData = req.body;
+  if (!roomData || Object.keys(roomData).length === 0) {
+    return res
+      .status(400)
+      .json({error: 'There are no fields in the request body'});
+  }
+  try {
+    await helpers.checkCreateUser() //i need dray
+  } catch (e) {
+    return res.status(400).json({error: e});
+  }
+  try {
+      const newUser = await updateUser(
+          roomData.roomID,
+          roomData.building,
+          roomData.roomNumber,
+          roomData.roomCapacity,
+          roomData.roomFeatures,
+          roomData.events,
+          roomData.unavailableTimes,
+          roomData.roomPicture
+      );
+      return res.json(newUser);
     } catch (e) {
-      return res.status(400).json({error: e});
+      console.log(e);
+      return res.sendStatus(500);
     }
-    try {
-        const newUser = await updateUser(
-            roomData.roomID,
-            roomData.building,
-            roomData.roomNumber,
-            roomData.roomCapacity,
-            roomData.roomFeatures,
-            roomData.events,
-            roomData.unavailableTimes,
-            roomData.roomPicture
-        );
-        return res.json(newUser);
-      } catch (e) {
-        console.log(e);
-        return res.sendStatus(500);
-      }
 });
 
 export default router;

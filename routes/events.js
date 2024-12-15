@@ -2,7 +2,15 @@ import {Router} from 'express';
 import { createEvent, getAllEvents, getEventByID, removeEvent, updateEvent } from '../data/events.js';
 import * as helpers from '../helpers.js';
 const router = Router();
-router.route('/').post(async (req, res) => {
+
+router.route('/').get(async (req, res) => {
+  try {
+    const eventslist = await getAllEvents();
+    return res.render('./eventlist', {title: "Events List", events: eventslist})
+  } catch (e) {
+    return res.status(500).send(e);
+  }
+}).post(async (req, res) => {
     let eventData = req.body;
     if (!eventData || Object.keys(eventData).length === 0) {
       return res
@@ -57,23 +65,12 @@ router.route('/:id').get(async (req, res) => {
         return res.status(400).json({error: e});
     }
     try {
-        const team = await getEventByID(req.params.id);
-        return res.json(team);
+        const event = await getEventByID(req.params.id);
+        return res.render('eventmanage',event);
     } catch (e) {
         return res.status(404).json(e);
     }
-});
-
-router.route('/').get(async (req, res) => {
-    try {
-        const eventslist = await getAllEvents();
-        return res.render('./eventlist', {title: "Events List", events: eventslist})
-      } catch (e) {
-        return res.status(500).send(e);
-      }
-});
-
-router.route('/:id').delete(async (req, res) => {
+}).delete(async (req, res) => {
     try {
         helpers.checkString(req.params.id, "ID");
         helpers.checkIsValidID(req.params.id, "ID");
@@ -86,9 +83,7 @@ router.route('/:id').delete(async (req, res) => {
     } catch (e) {
         return res.status(404).json(e);
     }
-});
-
-router.route('/:id').put(async (req, res) => {
+}).put(async (req, res) => {
     let eventData = req.body;
     if (!eventData || Object.keys(eventData).length === 0) {
       return res
@@ -135,8 +130,7 @@ router.route('/:id').put(async (req, res) => {
         console.log(e);
         return res.status(500).json({error: e});
       }
-});
-router.route('/:id').patch(async (req, res) => {
+}).patch(async (req, res) => {
     let eventData = req.body;
     if (!eventData || Object.keys(eventData).length === 0) {
       return res

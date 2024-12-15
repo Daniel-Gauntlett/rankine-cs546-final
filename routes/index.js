@@ -6,7 +6,7 @@ export const constructorMethod = (app) => {
     app.use('/rooms',roomroutes);
     app.use('/users',userroutes);
     app.use("*",(req,res) => {
-        return res.status(404).json({error:'Not found'});
+        res.render("home");
     });
 };
 
