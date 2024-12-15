@@ -48,6 +48,50 @@ router.route('/').get(async (req, res) => {
       }
 });
 
+router
+  .route('/signinuser')
+  .get(async (req, res) => {
+    res.render('login',{});
+  })
+  .post(async (req, res) => {
+    try {
+      helpers.checkSignInUser(req.body.username, req.body.password);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).render('login',{error: "Incorrect username or password"});
+    }
+    try {
+      req.session.user = await signInUser(req.body.username, req.body.password);
+      res.redirect("/");
+    } catch (e) {
+      console.log(e);
+      res.status(400).render('login',{error: "Incorrect username or password"});
+    }
+  });
+
+  router.route('/notification/:id').post(async (req, res) => {
+    let newNotif = req.body.notiftext;
+    try {
+        helpers.checkString(req.params.id, "ID");
+        helpers.checkIsValidID(req.params.id, "ID");
+        helpers.checkString(newNotif, "Notification")
+    } catch (e) {
+        return res.status(400).json({error: e});
+    }
+    try {
+        const newuser = await updateNotifications(req.params.id, newNotif);
+        return res.json(newuser);
+    } catch (e) {
+        return res.status(404).json(e);
+    }
+});
+
+
+router.route('/signoutuser').get(async (req, res) => {
+  req.session.destroy();
+  res.redirect('/users/signinuser');
+});
+
 router.route('/:id').get(async (req, res) => {
     try {
         helpers.checkString(req.params.id, "ID");
@@ -131,50 +175,6 @@ router.route('/:id').get(async (req, res) => {
         console.log(e);
         return res.sendStatus(500);
       }
-});
-
-router.route('/notification/:id').post(async (req, res) => {
-    let newNotif = req.body.notiftext;
-    try {
-        helpers.checkString(req.params.id, "ID");
-        helpers.checkIsValidID(req.params.id, "ID");
-        helpers.checkString(newNotif, "Notification")
-    } catch (e) {
-        return res.status(400).json({error: e});
-    }
-    try {
-        const newuser = await updateNotifications(req.params.id, newNotif);
-        return res.json(newuser);
-    } catch (e) {
-        return res.status(404).json(e);
-    }
-});
-
-router
-  .route('/signinuser')
-  .get(async (req, res) => {
-    res.render('login',{});
-  })
-  .post(async (req, res) => {
-    try {
-      helpers.checkSignInUser(req.body.username, req.body.password);
-    } catch (e) {
-      console.log(e);
-      return res.status(400).render('login',{error: "Incorrect username or password"});
-    }
-    try {
-      req.session.user = await signInUser(req.body.username, req.body.password);
-      res.redirect("/");
-    } catch (e) {
-      console.log(e);
-      res.status(400).render('login',{error: "Incorrect username or password"});
-    }
-  });
-
-
-router.route('/signoutuser').get(async (req, res) => {
-  req.session.destroy();
-  res.redirect('/users/signinuser');
 });
 
 export default router;
