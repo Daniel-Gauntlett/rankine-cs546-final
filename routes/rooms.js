@@ -19,7 +19,7 @@ router.route('/').get(async (req, res) => {
         .json({error: 'There are no fields in the request body'});
     }
     try {
-      await helpers.checkCreateRoom(roomData.roomID,roomData.building,roomData.roomNumber,roomData.roomCapacity,roomData.roomFeatures,roomData.unavailableTimesList,roomData.roomPicture) // I need dray
+      await helpers.checkCreateRoom(roomData.roomID,roomData.building,roomData.roomNumber,roomData.roomCapacity,roomData.roomFeatures,roomData.unavailableTimesList,roomData.roomPicture)
       unavailableTimes = calculateUnavailableTimes(unavailableTimesList)
     } catch (e) {
       return res.status(400).json({error: e});
@@ -73,7 +73,7 @@ router.route('/:id').get(async (req, res) => {
       .json({error: 'There are no fields in the request body'});
   }
   try {
-    await helpers.checkCreateUser() //i need dray
+    await helpers.checkCreateRoom() //i need dray
   } catch (e) {
     return res.status(400).json({error: e});
   }
