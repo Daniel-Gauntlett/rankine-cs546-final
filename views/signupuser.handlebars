@@ -6,7 +6,9 @@
         userData.beingGranted,
         userData.usersApproving,
         userData.notifications --}}
+{{#if error}}
 <p id = "error" class="error">{{error}}</p>
+{{/if}}
 <form action="/users/" method="POST" id="signup-form">
     <label for = "firstName">
         First Name:
