@@ -53,7 +53,6 @@ export const createRoom = async (
       roomNumber,
       roomCapacity,
       roomFeatures,
-      events,
       unavailableTimes,
       roomPicture
     };
@@ -70,22 +69,21 @@ export const createRoom = async (
 
 //Modify room
 export const updateRoom = async (
-    roomID,
+    id,
     building,
     roomNumber,
     roomCapacity,
     roomFeatures,
-    events,
     unavailableTimes,
     roomPicture
   ) => {
     
     try {
-      await helpers.checkUpdateRoom(roomID,building,roomNumber,roomCapacity,roomFeatures,events,unavailableTimes,roomPicture);    } catch (e) {
+      await helpers.checkUpdateRoom(id,building,roomNumber,roomCapacity,roomFeatures,unavailableTimes,roomPicture);    } catch (e) {
       throw e;
     }
     let newRoom = {
-        building,roomNumber,roomCapacity,roomFeatures,events,unavailableTimes,roomPicture
+        building,roomNumber,roomCapacity,roomFeatures,unavailableTimes,roomPicture
     };
     const roomCollection = await rooms();
     const updatedInfo = await roomCollection.findOneAndUpdate(
@@ -115,6 +113,7 @@ export const getRoomByID = async (id) => {
     room._id = room._id.toString();
     return room;
   };
+
 export const getAllRooms = async () => {
     const roomCollection = await rooms();
     let roomList = await roomCollection
@@ -148,6 +147,26 @@ export const removeRoom = async (id) => {
     return deletionInfo._id;
   };
 
-//Calculate unavailable times (used by room function)
-
-//
+export const patchRoom = async (
+    id,
+    updateObject
+  ) => {
+    let originalRoom = await getRoomByID(id);
+    updateObject = helpers.checkPatchRoom(id, originalRoom, updateObject);
+    let newRoom = {
+      ...originalRoom,
+      ...updateObject
+    };
+    delete newRoom._id;
+    const roomCollection = await rooms();
+    const updatedInfo = await roomCollection.findOneAndUpdate(
+      {_id: new ObjectId(id)},
+      {$set: newRoom},
+      {returnDocument: 'after'}
+    );
+    if (!updatedInfo) {
+      throw 'could not update room successfully';
+    }
+    updatedInfo._id = updatedInfo._id.toString();
+    return updatedInfo;
+  };
