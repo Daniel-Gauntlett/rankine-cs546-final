@@ -353,7 +353,6 @@ export const checkCreateRoom = async (
 
     if(!roomPicture) throw "Picture URL not given"
     roomPicture = checkString(roomPicture, "Room Picture")
-
 }
 
 export const checkUpdateRoom = async (
@@ -378,3 +377,20 @@ export const checkUpdateRoom = async (
     }
 
 }
+
+export const checkPatchRoom = (
+    id,
+    originalRoom,
+    updateObject
+  ) => {
+    if(!id) throw "No id given for room";
+    if(!originalRoom) originalRoom = undefined;
+    id = checkIsValidID(id, "room ID");
+    if('building' in updateObject) updateObject.building = checkString(updateObject.building);
+    if('roomNumber' in updateObject) updateObject.roomNumber = checkString(updateObject.roomNumber);
+    if('roomCapacity' in updateObject) updateObject.roomCapacity = checkString(updateObject.roomCapacity);
+    if('roomFeatures' in updateObject) updateObject.roomFeatures = checkArrayOfStrings(updateObject.roomFeatures)
+    if('unavaliableTimes' in updateObject) updateObject.unavailableTimes = checkDateArrayArray(updateObject.unavailableTimes)
+    if('roomPicture' in updateObject) updateObject.picture = checkString(updateObject.picture);
+    return updateObject;
+  }
