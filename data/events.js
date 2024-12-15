@@ -16,27 +16,7 @@ export const createEvent = async (
     attendeesList,
     picture
   ) => {
-    try {
-      await helpers.checkCreateEvent(name,description,startDate,endDate,isRecurring,recurUntil,isPrivate,roomID,status,organizerID,rsvpList,attendeesList,picture);
-    }
-    catch (e) {
-      throw e;
-    }
-    let newEvent = {
-      name,
-      description,
-      startDate,
-      endDate,
-      isRecurring,
-      recurUntil,
-      isPrivate,
-      roomID,
-      status,
-      organizerID,
-      rsvpList,
-      attendeesList,
-      picture
-    };
+    let newEvent = helpers.checkCreateEvent(name,description,startDate,endDate,isRecurring,recurUntil,isPrivate,roomID,status,organizerID,rsvpList,attendeesList,picture);
     const eventCollection = await events();
     const insertInfo = await eventCollection.insertOne(newEvent);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
@@ -66,7 +46,7 @@ export const getAllEvents = async () => {
     const eventCollection = await events();
     let eventList = await eventCollection
         .find({})
-        .project({_id: 1, name: 1})
+        // .project({_id: 1, name: 1})
         .toArray();
     if (!eventList) throw 'Could not get all events';
     for(let event of eventList)
@@ -91,7 +71,6 @@ export const removeEvent = async (id) => {
     if (!deletionInfo) {
       throw `Could not delete event with id of ${id}`;
     }
-    //{"_id": "507f1f77bcf86cd799439011", "deleted": true}
     return deletionInfo._id;
   };
 
@@ -111,26 +90,31 @@ export const updateEvent = async (
     attendeesList,
     picture
   ) => {
-    
-    try {
-      await helpers.checkUpdateEvent(id,name,description,startDate,endDate,isRecurring,recurUntil,isPrivate,roomID,status,organizerID,rsvpList,attendeesList,picture);    } catch (e) {
-      throw e;
+    let newEvent = helpers.checkCreateEvent(name,description,startDate,endDate,isRecurring,recurUntil,isPrivate,roomID,status,organizerID,rsvpList,attendeesList,picture);
+    const eventCollection = await events();
+    const updatedInfo = await eventCollection.findOneAndUpdate(
+      {_id: new ObjectId(id)},
+      {$set: newEvent},
+      {returnDocument: 'after'}
+    );
+    if (!updatedInfo) {
+      throw 'could not update event successfully';
     }
+    updatedInfo._id = updatedInfo._id.toString();
+    return updatedInfo;
+  };
+
+  export const patchEvent = async (
+    id,
+    updateObject
+  ) => {
+    let originalEvent = await getEventByID(id);
+    updateObject = helpers.checkPatchEvent(id, originalEvent, updateObject);
     let newEvent = {
-      name,
-      description,
-      startDate,
-      endDate,
-      isRecurring,
-      recurUntil,
-      isPrivate,
-      roomID,
-      status,
-      organizerID,
-      rsvpList,
-      attendeesList,
-      picture
+      ...originalEvent,
+      ...updateObject
     };
+    delete newEvent._id;
     const eventCollection = await events();
     const updatedInfo = await eventCollection.findOneAndUpdate(
       {_id: new ObjectId(id)},
