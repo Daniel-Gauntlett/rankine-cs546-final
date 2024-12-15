@@ -42,7 +42,7 @@ export const createRoom = async (
     roomPicture
   ) => {
     try {
-      await helpers.checkCreateRoom(roomID,building,roomNumber,roomCapacity,roomFeatures,unavailableTimesList,roomPicture);
+      await helpers.checkCreateRoom(building,roomNumber,roomCapacity,roomFeatures,unavailableTimesList,roomPicture);
       unavailableTimes = calculateUnavailableTimes(unavailableTimesList)
     }
     catch (e) {

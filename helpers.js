@@ -353,4 +353,28 @@ export const checkCreateRoom = async (
 
     if(!roomPicture) throw "Picture URL not given"
     roomPicture = checkString(roomPicture, "Room Picture")
+
+}
+
+export const checkUpdateRoom = async (
+    roomID,
+    building,
+    roomNumber,
+    roomCapacity,
+    roomFeatures,
+    unavailableTimes,
+    roomPicture
+    ) => {
+    if(!roomID) throw "No id given for event";
+    id = checkIsValidID(id, "event ID");
+    try {
+        await checkCreateRoom(building, roomNumber,
+            roomCapacity,
+            roomFeatures,
+            unavailableTimes,
+            roomPicture);
+    } catch (e) {
+        throw e;
+    }
+
 }
