@@ -11,7 +11,8 @@ router.route('/').post(async (req, res) => {
         .json({error: 'There are no fields in the request body'});
     }
     try {
-      await helpers.checkCreateRoom() // I need dray
+      await helpers.checkCreateRoom(roomData.roomID,roomData.building,roomData.roomNumber,roomData.roomCapacity,roomData.roomFeatures,roomData.unavailableTimesList,roomData.roomPicture) // I need dray
+      unavailableTimes = calculateUnavailableTimes(unavailableTimesList)
     } catch (e) {
       return res.status(400).json({error: e});
     }
@@ -58,6 +59,21 @@ router.route('/:id').delete(async (req, res) => {
     } catch (e) {
         return res.status(404).json(e);
     }
+});
+
+router.route('/:id/times').get(async (req, res) => {
+  try {
+      helpers.checkString(req.params.id, "ID");
+      helpers.checkIsValidID(req.params.id, "ID");
+  } catch (e) {
+      return res.status(400).json({error: e});
+  }
+  try {
+      const room = await getRoomByID(req.params.id);
+      return room.unavailableTimes;
+  } catch (e) {
+      return res.status(404).json(e);
+  }
 });
 
 router.route('/:id').put(async (req, res) => {
