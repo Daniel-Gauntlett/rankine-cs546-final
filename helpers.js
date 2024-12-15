@@ -141,7 +141,7 @@ export const checkCreateRoom = async (
     roomNumber,
     roomCapacity,
     roomFeatures,
-    unavaliableTimes,
+    unavailableTimes,
     roomPicture
     ) => {
     if(!building) throw "Building name not given";
@@ -156,8 +156,8 @@ export const checkCreateRoom = async (
     if(!roomFeatures) throw "Room features not given";
     roomFeatures = checkArrayOfStrings(roomFeatures, "Room Features")
 
-    if(!unavaliableTimes) throw "Times not given";
-    unavaliableTimes = checkDateArrayArray(unavaliableTimes, "Date Array")
+    if(!unavailableTimes) throw "Times not given";
+    unavailableTimes = checkDateArrayArray(unavailableTimes, "Date Array")
 
     if(!roomPicture) throw "Picture URL not given"
     roomPicture = checkString(roomPicture, "Room Picture")

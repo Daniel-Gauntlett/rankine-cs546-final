@@ -4,7 +4,7 @@ import * as helpers from '../helpers.js';
 
 //Create room
 
-export const calculateUnavaliableTimes = (times) => {
+export const calculateUnavailableTimes = (times) => {
   //times argument: Array of arrays. Each array contains start date object, end date object, isRecurring, and end date for recurring. 
   //Returns list of pairs, each pair being a start date object and an end date object
   //For each element in Array:
@@ -38,12 +38,12 @@ export const createRoom = async (
     roomNumber,
     roomCapacity,
     roomFeatures,
-    unavaliableTimesList,
+    unavailableTimesList,
     roomPicture
   ) => {
     try {
-      await helpers.checkCreateRoom(roomID,building,roomNumber,roomCapacity,roomFeatures,unavaliableTimesList,roomPicture);
-      unavaliableTimes = calculateUnavaliableTimes(unavaliableTimesList)
+      await helpers.checkCreateRoom(roomID,building,roomNumber,roomCapacity,roomFeatures,unavailableTimesList,roomPicture);
+      unavailableTimes = calculateUnavailableTimes(unavailableTimesList)
     }
     catch (e) {
       throw e;
@@ -54,7 +54,7 @@ export const createRoom = async (
       roomCapacity,
       roomFeatures,
       events,
-      unavaliableTimes,
+      unavailableTimes,
       roomPicture
     };
     const rooomCollection = await rooms();
@@ -76,16 +76,16 @@ export const updateRoom = async (
     roomCapacity,
     roomFeatures,
     events,
-    unavaliableTimes,
+    unavailableTimes,
     roomPicture
   ) => {
     
     try {
-      await helpers.checkUpdateRoom(roomID,building,roomNumber,roomCapacity,roomFeatures,events,unavaliableTimes,roomPicture);    } catch (e) {
+      await helpers.checkUpdateRoom(roomID,building,roomNumber,roomCapacity,roomFeatures,events,unavailableTimes,roomPicture);    } catch (e) {
       throw e;
     }
     let newRoom = {
-        building,roomNumber,roomCapacity,roomFeatures,events,unavaliableTimes,roomPicture
+        building,roomNumber,roomCapacity,roomFeatures,events,unavailableTimes,roomPicture
     };
     const roomCollection = await rooms();
     const updatedInfo = await roomCollection.findOneAndUpdate(
@@ -148,6 +148,6 @@ export const removeRoom = async (id) => {
     return deletionInfo._id;
   };
 
-//Calculate unavaliable times (used by room function)
+//Calculate unavailable times (used by room function)
 
 //
