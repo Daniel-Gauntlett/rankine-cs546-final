@@ -1,0 +1,17 @@
+<form action="/users/" method="POST" id="permissions-form">
+    <p id="user">
+        Username:{{username}},
+        First Name: {{firstName}},
+        Last Name: {{lastName}},
+        Permissions: {{permissions}},
+        Being Granted: {{beingGranted}},
+        Approving Users: {{usersApproving}}
+    </p>
+    <label for = "permissions">
+        Change Permissions to: 
+        <input type="text" id="permissions" name="permissions">
+    </label>
+    <label for = "submit_button">
+        <button name="submit_button" id="submit_button" type="submit">Submit</button>
+    </label>
+</form>
