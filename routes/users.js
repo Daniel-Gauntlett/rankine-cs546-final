@@ -49,7 +49,7 @@ router.route('/').get(async (req, res) => {
 });
 
 router
-  .route('/signinuser')
+  .route('/users/signinuser')
   .get(async (req, res) => {
     res.render('login',{});
   })
