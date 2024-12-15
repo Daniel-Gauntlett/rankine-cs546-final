@@ -184,3 +184,28 @@ export const signInUser = async (username, userPassword) => {
     }
     throw "Either the username or password is invalid";  
 }
+
+export const permissionsCheck = async (adminId, userId, usersApproving, permissions) => {
+    if (!adminId) throw "No admin id given";
+    if (!userId) throw "No user id given";
+    if (!usersApproving) throw "No approving users given";
+    if (!permissions) throw "No permissions given";
+    if (!Array.isArray(usersApproving)) throw "Given users approving list is not an array";
+    for (let i = 0; i < usersApproving.length; i++){
+        let testval = helpers.checkIsValidID(usersApproving[i], "Administrator Account ID");
+    }
+    if (permissions !== 0 && permissions !== 1 && permissions !== 2) throw "Permissions is not a valid integer";
+    if (permissions === 2) throw "Permissions is already at the highest level";
+    adminId = helpers.checkIsValidID(adminId, "Admin ID");
+    userId = helpers.checkIsValidID(userId, "User ID");
+    usersApproving.push(adminId);
+    if (usersApproving.length >= 2){
+        permissions++;
+        let obj = {
+            permissions: permissions,
+            usersApproving: []
+        };
+        let test = patchUser(userId, obj);
+    }
+    return test;
+}
