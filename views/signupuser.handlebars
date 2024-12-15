@@ -1,0 +1,35 @@
+{{!--   userData.username,
+        userData.userPassword,
+        userData.firstName,
+        userData.lastName,
+        userData.permissions,
+        userData.beingGranted,
+        userData.usersApproving,
+        userData.notifications --}}
+<p id = "error" class="error">{{error}}</p>
+<form action="/users/" method="POST" id="signup-form">
+    <label for = "firstName">
+        First Name:
+        <input type="text" id="firstName" name = "firstName">
+    </label>
+    <label for = "lastName">
+        Last Name:
+        <input type="text" id="lastName" name = "lastName" >
+    </label>
+    <label for="username">
+        User Id:
+        <input type="text" id="username" name = "username" >
+    </label>
+    <label for="password">
+        Password:
+        <input type="password" id="userPassword" name = "userPassword" >
+    </label>
+    <label for="confirmPassword">
+        Confirm Password:
+        <input type="password" id="confirmPassword" name = "confirmPassword" >
+    </label>
+    <label for = "submit_button">
+        Button:
+        <button name="submit_button" id="submit_button" type="submit">Submit</button>
+    </label>
+</form>
