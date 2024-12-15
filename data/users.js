@@ -76,7 +76,7 @@ export const updateUser = async (
     notifications
 ) => {
     id = helpers.checkIsValidID(id, "id");
-    let test = helpers.checkCreateUser(userID, username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
+    let test = helpers.checkCreateUser(username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
     let newUser = {
         username,
         userPassword,

@@ -1,9 +1,16 @@
 import {Router} from 'express';
 import * as helpers from '../helpers.js';
-import { createUser, getUserById, updateUser, removeUser, updateNotifications, patchUser } from '../data/users.js';
+import { createUser, getUserById, updateUser, removeUser, updateNotifications, patchUser, getAllUsers } from '../data/users.js';
 const router = Router();
 
-router.route('/').post(async (req, res) => {
+router.route('/').get(async (req, res) => {
+  try {
+    const userlist = await getAllUsers();
+    return res.render('./userlist', {title: "User List", users: userlist})
+  } catch (e) {
+    return res.status(500).send(e);
+  }
+}).post(async (req, res) => {
     let userData = req.body;
     if (!userData || Object.keys(userData).length === 0) {
       return res
@@ -12,29 +19,27 @@ router.route('/').post(async (req, res) => {
     }
     try {
       await helpers.checkCreateUser(
-        userData.userID,
         userData.username,
         userData.userPassword,
         userData.firstName,
         userData.lastName,
-        userData.permissions,
-        userData.beingGranted,
-        userData.usersApproving,
-        userData.notifications)
+        0,
+        false,
+        [],
+        [])
     } catch (e) {
       return res.status(400).json({error: e});
     }
     try {
         const newUser = await createUser(
-            userData.userID,
             userData.username,
             userData.userPassword,
             userData.firstName,
             userData.lastName,
-            userData.permissions,
-            userData.beingGranted,
-            userData.usersApproving,
-            userData.notifications
+            0,
+            false,
+            [],
+            []
         );
         return res.json(newUser);
       } catch (e) {
@@ -52,13 +57,11 @@ router.route('/:id').get(async (req, res) => {
     }
     try {
         const user = await getUserById(req.params.id);
-        return res.json(user);
+        return res.render('usermanage',user);
     } catch (e) {
         return res.status(404).json(e);
     }
-});
-
-router.route('/:id').delete(async (req, res) => {
+}).delete(async (req, res) => {
     try {
         helpers.checkString(req.params.id, "ID");
         helpers.checkIsValidID(req.params.id, "ID");
@@ -71,9 +74,7 @@ router.route('/:id').delete(async (req, res) => {
     } catch (e) {
         return res.status(404).json(e);
     }
-});
-
-router.route('/:id').put(async (req, res) => {
+}).put(async (req, res) => {
     let userData = req.body;
     if (!userData || Object.keys(userData).length === 0) {
       return res
@@ -82,7 +83,6 @@ router.route('/:id').put(async (req, res) => {
     }
     try {
       await helpers.checkCreateUser(eventData.name,
-        userData.userID,
         userData.username,
         userData.userPassword,
         userData.firstName,
@@ -96,7 +96,6 @@ router.route('/:id').put(async (req, res) => {
     }
     try {
         const newUser = await updateUser(
-            userData.userID,
             userData.username,
             userData.userPassword,
             userData.firstName,
@@ -111,9 +110,7 @@ router.route('/:id').put(async (req, res) => {
         console.log(e);
         return res.sendStatus(500);
       }
-});
-
-router.route('/:id').patch(async (req, res) => {
+}).patch(async (req, res) => {
     let userData = req.body;
     if (!userData || Object.keys(userData).length === 0) {
       return res
@@ -146,11 +143,38 @@ router.route('/notification/:id').post(async (req, res) => {
         return res.status(400).json({error: e});
     }
     try {
-        const newuser = await updateNotifications(req.params.id, newNotif); //UPDATE ONCE PAUL FINISHES
+        const newuser = await updateNotifications(req.params.id, newNotif);
         return res.json(newuser);
     } catch (e) {
         return res.status(404).json(e);
     }
+});
+
+router
+  .route('/signinuser')
+  .get(async (req, res) => {
+    res.render('login',{});
+  })
+  .post(async (req, res) => {
+    try {
+      helpers.checkSignInUser(req.body.username, req.body.password);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).render('login',{error: "Incorrect username or password"});
+    }
+    try {
+      req.session.user = await signInUser(req.body.username, req.body.password);
+      res.redirect("/");
+    } catch (e) {
+      console.log(e);
+      res.status(400).render('login',{error: "Incorrect username or password"});
+    }
+  });
+
+
+router.route('/signoutuser').get(async (req, res) => {
+  req.session.destroy();
+  res.redirect('/users/signinuser');
 });
 
 export default router;
