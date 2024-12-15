@@ -3,8 +3,6 @@ import session from 'express-session';
 import exphbs from 'express-handlebars';
 const app = express();
 import configRoutes from './routes/index.js';
-
-import * as middlewares from './middlewares.js'
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
@@ -19,9 +17,32 @@ app.use(
      );
 const staticDir = express.static('public');
 app.use('/public', staticDir);
-
-app.use('/favicon.ico', express.static('public/favicon.ico'));
-app.use(middlewares.GlobalMiddleware);
+app.use('/', (req, res, next) => {
+    if(req.session.user)
+    {
+         if(req.session.user.role==="user") console.log(`[${new Date().toUTCString()}]: ${req.method} ${req.originalUrl} (Authenticated Administrator User)`);
+         else console.log(`[${new Date().toUTCString()}]: ${req.method} ${req.originalUrl} (Authenticated User)`);
+    }
+    else console.log(`[${new Date().toUTCString()}]: ${req.method} ${req.originalUrl} (Non-Authenticated)`);
+    next();
+});
+app.get('/users/', (req, res, next) => {
+    if(!req.session.user) res.redirect('/signinuser');
+    else if(req.session.user.permissions !== 2) res.status(403).render('./error', {Title: "Error", error: "Don't have permission to view the page"});
+    else next();
+});
+app.get('/events/', (req, res, next) => {
+  next();
+});
+app.get('/users/', (req, res, next) => {
+  if(!req.session.user) res.redirect('/signinuser');
+  else if(req.session.user.permissions !== 2) res.status(403).render('./error', {Title: "Error", error: "Don't have permission to view the page"});
+  else next();
+});
+app.get('/users/signinuser', (req,res,next) => {
+  if(req.session.user) res.redirect(`/`);
+  else next();
+});
 configRoutes(app);
 app.listen(3000, () => {
   console.log("We've now got a server!");
