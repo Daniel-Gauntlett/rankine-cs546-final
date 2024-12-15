@@ -47,7 +47,7 @@ app.get('/users/signoutuser', (req, res, next) => {
 });
 app.get('/users/user/:id', (req, res, next) => {
   if(!req.session.user) res.redirect("/users/signinuser");
-  else if(req.session.user.username !== req.params.id) res.redirect('/');
+  else if(req.session.user.username !== req.params.id && req.session.user.permissions !== 2) res.status(403).render('./error', {Title: "Error", error: "Don't have permission to view the page"});
   else next();
 }) 
 configRoutes(app);
