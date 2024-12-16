@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import { createEvent, getAllEvents, getEventByID, patchEvent, removeEvent, updateEvent } from '../data/events.js';
 import * as helpers from '../helpers.js';
+import xss from 'xss';
 const router = Router();
 
 router.route('/').get(async (req, res) => {
@@ -14,6 +15,8 @@ router.route('/').get(async (req, res) => {
     return res.status(500).send(e);
   }
 }).post(async (req, res) => {
+    //https://stackoverflow.com/questions/66139376/how-to-apply-math-or-a-function-to-every-element-in-a-javascript-object
+    Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
     let eventData = req.body;
     if (!eventData || Object.keys(eventData).length === 0) {
       return res
@@ -62,6 +65,7 @@ router.route('/').get(async (req, res) => {
 
 router.route('/:id').get(async (req, res) => {
     try {
+        req.params.id = xss(req.params.id);
         helpers.checkString(req.params.id, "ID");
         helpers.checkIsValidID(req.params.id, "ID");
     } catch (e) {
@@ -81,6 +85,7 @@ router.route('/:id').get(async (req, res) => {
     }
 }).delete(async (req, res) => {
     try {
+        req.params.id = xss(req.params.id);
         helpers.checkString(req.params.id, "ID");
         helpers.checkIsValidID(req.params.id, "ID");
       } catch (e) {
@@ -97,6 +102,7 @@ router.route('/:id').get(async (req, res) => {
         return res.status(404).json(e);
     }
 }).put(async (req, res) => {
+    Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
     let eventData = req.body;
     if (!eventData || Object.keys(eventData).length === 0) {
       return res
@@ -104,6 +110,7 @@ router.route('/:id').get(async (req, res) => {
         .json({error: 'There are no fields in the request body'});
     }
     try {
+      req.params.id = xss(req.params.id);
       await helpers.checkUpdateEvent(req.params.id, 
         eventData.name,
         eventData.description,
@@ -148,6 +155,7 @@ router.route('/:id').get(async (req, res) => {
         return res.status(500).json({error: e});
       }
 }).patch(async (req, res) => {
+    Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
     let eventData = req.body;
     if (!eventData || Object.keys(eventData).length === 0) {
       return res
@@ -155,6 +163,7 @@ router.route('/:id').get(async (req, res) => {
         .json({error: 'There are no fields in the request body'});
     }
     try {
+      req.params.id = xss(req.params.id);
       helpers.checkPatchEvent(req.params.id, (await getEventByID(req.params.id)), req.body)
     } catch (e) {
       return res.status(400).json({error: e});
@@ -175,6 +184,8 @@ router.route('/:id').get(async (req, res) => {
 });
 
 router.route('/:id/rsvp').patch(async (req, res) => {
+  Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
+  req.params.id = xss(req.params.id);
   const event = await getEventByID(req.params.id)
   if (!event.rsvpList.includes(req.session.user.username)){
     req.body.rsvpList = event.rsvpList.push(req.session.user.username);
@@ -186,6 +197,8 @@ router.route('/:id/rsvp').patch(async (req, res) => {
 })
 
 router.route('/:id/unrsvp').patch(async (req, res) => {
+  Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
+  req.params.id = xss(req.params.id);
   const event = await getEventByID(req.params.id)
   if (!event.rsvpList.includes(req.session.user.username)){
     req.body.rsvpList = event.rsvpList;
