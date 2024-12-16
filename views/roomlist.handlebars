@@ -6,7 +6,13 @@
     Events: {{events}},
     Unavailable Times: {{unavailableTimes}},
     Room Picture: {{roomPicture}}</p>
-    <form action="/createEvent" method="POST" id="bookRoom">
+    <form action="/events/" method="POST" id="bookRoom">
 		<button type="submit" name="booking_button" id="booking_button">Book This Room!</button>
-	</form>
+	  </form>
+    <!--- Only show this if user is admin, maybe inject with Ajax? Should link to roommanage page for specific room ID-->
+    <div class="showEditButton">
+    <form action="/rooms/" method="POST" id="editRoom">
+    <button type="submit" name="editRoomButton" id="editRoomButton">Manage This Room</button>
+    </form>
+    </div>
 {{/each}}
