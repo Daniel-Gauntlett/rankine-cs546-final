@@ -31,6 +31,15 @@ export const getUserById = async (id) => {
     return user;
 }
 
+export const getUserByUsername = async (username) => {
+    username = helpers.checkString(username, "Username");
+    if (username.length < 5 || username.length > 10) throw "Given username is incorrect length";
+    const userCollection = await users();
+    const user = await userCollection.findOne({username: username});
+    if (user === null) throw 'No user with that username';
+    return user;
+}
+
 export const getAllUsers = async () => {
     const userCollection = await users();
     let userList = await userCollection
