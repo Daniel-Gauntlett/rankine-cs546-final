@@ -1,14 +1,33 @@
 
-<p id="event">Event Name: {{name}},
-Event Description: {{description}},
-Start Date: {{startDate}},
-End Date: {{endDate}},
-Event Picture: <img class="eventImage"
-                          alt="{{name}} Poster"
-                          src="{{picture}}"
-                          height="324"
-                          width="576"></p>
+<p id="eventInfo" class="{{_id}}">Event Name: {{name}},<br>
+Event Description: {{description}},<br>
+Start Date: {{startDate}},<br>
+End Date: {{endDate}},<br>
+Event Picture: {{picture}},<br>
+Status: {{status}}</p>
+{{#if canRSVP}}
+{{#if hasRSVPed}}
+<p>You've RSVPed for this event!</p>
+<form action="/events/{{_id}}/unrsvp" method="PATCH" id="unrsvp_form">
+    <button type="submit" name="rsvp_button" id="unrsvp_button">UnRSVP for this event</button>
+</form>
+{{else}}
+<form action="/events/{{_id}}/rsvp" method="PATCH" id="rsvp_form">
+    <button type="submit" name="rsvp_button" id="rsvp_button">RSVP for this event</button>
+</form>
+{{/if}}
+{{/if}}
+{{#if canApprove}}
+<form action="/events/" method="PATCH" id="approve_form">
+    <label for = "name">
+        Approval:
+        <input type="checkbox" id="approval-checkbox" name="approval">
+    </label>
+    <button type="submit" name="approve_form" id="approve_form">Submit approval</button>
+</form>
+{{/if}}
 
+{{#if canEdit}}
 <form action="/events/" method="PATCH" id="patch-event-form">
     <label for = "name">
         Event Name:
@@ -30,7 +49,16 @@ Event Picture: <img class="eventImage"
         <button type="submit" name="edit_button" id="edit_button">Submit Event Edit</button>
     </label>
 </form>
+{{/if}}
 
+{{#if canEdit}}
 <form action="/events/" method="DELETE" id="deleteEvent">
     <button type="submit" name="delete_button" id="delete_button">Delete Event</button>
 </form>
+{{/if}}
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+crossorigin="anonymous"></script>
+<script src="../public/js/ajax.js"></script>
