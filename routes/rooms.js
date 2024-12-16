@@ -6,7 +6,7 @@ const router = Router();
 router.route('/').get(async (req, res) => {
   try {
       const roomList = await getAllRooms();
-      return res.render('./roomlist', {title: "Room List", events: roomList})
+      return res.render('./roomlist', {title: "Room List", rooms: roomList})
     } catch (e) {
       return res.status(500).send(e);
     }

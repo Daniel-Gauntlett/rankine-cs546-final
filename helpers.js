@@ -131,9 +131,9 @@ export const checkCreateEvent = (
     if(isRecurring && (new Date(recurUntil) < new Date(startDate) || new Date(recurUntil) < new Date(endDate))) throw "Recurring date is before end date or start date";
     roomID = checkIsValidID(roomID, "Room ID");
     if(typeof status !== "number" || (status !== 0 && status !== 1 && status !== 2)) throw "Status isn't a number";
-    organizerID = checkIsValidID(organizerID, "Organizer ID");
-    rsvpList = checkIsValidIDs(rsvpList, "RSVP list");
-    attendeesList = checkIsValidIDs(attendeesList, "Attendees list");
+    organizerID = checkString(organizerID, "Organizer ID");
+    rsvpList = checkArrayOfStrings(rsvpList, "RSVP list");
+    attendeesList = checkArrayOfStrings(attendeesList, "Attendees list");
     picture = checkString(picture, "Picture link");
     return {name, description, startDate, endDate, isRecurring, recurUntil, isPrivate, roomID, status, organizerID, rsvpList, attendeesList, picture};
   }
@@ -204,7 +204,7 @@ export const checkCreateEvent = (
     return updateObject;
   }
   const checkPatchRecur = (startDate, endDate, recurUntil, isRecurring, originalEvent) =>{
-    if(isRecurring && recurUntil)
+    if(typeof isRecurring !== "undefined" && typeof recurUntil !== "undefined")
       {
         if(typeof isRecurring !== "boolean") throw "Recurring is not a vaild boolean for event";
         if(!recurUntil && isRecurring) throw "No recur until date given for recurring event";
@@ -213,14 +213,14 @@ export const checkCreateEvent = (
         if(isRecurring && (new Date(recurUntil) < new Date(startDate) || new Date(recurUntil) < new Date(endDate))) throw "Recurring date is before end date or start date";
         return recurUntil;
       }
-      else if(isRecurring)
+      else if(typeof isRecurring !== "undefined")
       {
         if(typeof isRecurring !== "boolean") throw "Recurring is not a vaild boolean for event";
         if(!originalEvent.recurUntil && isRecurring) throw "No recur until date given for recurring event";
         if(originalEvent.recurUntil && !isRecurring) throw "Recur until date given for nonrecurring event";
         return null;
       }
-      else if(recurUntil)
+      else if(typeof recurUntil !== "undefined")
       {
         if(!recurUntil && originalEvent.isRecurring) throw "No recur until date given for recurring event";
         if(recurUntil && !originalEvent.isRecurring) throw "Recur until date given for nonrecurring event";
@@ -228,6 +228,7 @@ export const checkCreateEvent = (
         if(originalEvent.isRecurring && (new Date(recurUntil) < new Date(startDate) || new Date(recurUntil) < new Date(endDate))) throw "Recurring date is before end date or start date";
         return recurUntil;
       }
+      return originalEvent.recurUntil;
   }
 
 export const checkCreateUser = async (
@@ -262,9 +263,7 @@ export const checkCreateUser = async (
         if (permissions !== 0 && permissions !== 1 && permissions !== 2) throw "Permissions is not a valid integer";
         if (typeof beingGranted !== "boolean") throw "Boolean not provided for being granted status";
         if (!Array.isArray(usersApproving)) throw "Given users approving list is not an array";
-        for (let i = 0; i < usersApproving.length; i++){
-            let testval = checkIsValidID(usersApproving[i], "Administrator Account ID");
-        }
+        let testval = checkArrayOfStrings(usersApproving);
         if (!Array.isArray(notifications)) throw "Given notifications is not an array";
         for (let i = 0; i < notifications.length; i++){
             let testval = checkString(notifications[i], "Notification");
@@ -339,8 +338,8 @@ export const checkSignInUser = async (username, userPassword) => {
     if (!username) throw "No username given";
     if (!userPassword) throw "No password given";
     username = checkString(username, "Given first name");
-    if (username.length < 5 || firstName.length > 10) throw "Given username is incorrect length, must be between 5-10 characters.";
-    userPassword = await checkIsValidPassword(userPassword, 8);
+    if (username.length < 5 || username.length > 10) throw "Given username is incorrect length, must be between 5-10 characters.";
+    userPassword = checkIsValidPassword(userPassword, 8);
     return true;
 }
 

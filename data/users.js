@@ -31,6 +31,15 @@ export const getUserById = async (id) => {
     return user;
 }
 
+export const getUserByUsername = async (username) => {
+    username = helpers.checkString(username, "Username");
+    if (username.length < 5 || username.length > 10) throw "Given username is incorrect length";
+    const userCollection = await users();
+    const user = await userCollection.findOne({username: username});
+    if (user === null) throw 'No user with that username';
+    return user;
+}
+
 export const getAllUsers = async () => {
     const userCollection = await users();
     let userList = await userCollection
@@ -160,15 +169,16 @@ export const signInUser = async (username, userPassword) => {
     let userCollection = await users();
     let user = await userCollection.findOne({username: username});
     if (!user) throw "Either the username or password is invalid";
-    let userPass = user.password;
-    let truthval = await bcrypt.compare(password, userPass);
+    let userPass = user.userPassword;
+    let truthval = await bcrypt.compare(userPassword, userPass);
     if (truthval){
       let userFields = {
         username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
         permissions: user.permissions,
-        notifications: user.notifications
+        notifications: user.notifications,
+        isBooking: false,
       }
       return userFields;
     }
