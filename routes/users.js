@@ -7,6 +7,8 @@ import xss from 'xss';
 router.route('/').get(async (req, res) => {
   try {
     const userlist = await getAllUsers();
+    req.session.user.isBooking = false;
+    req.session.user.currentBooking = {};
     return res.render('./userlist', {title: "User List", users: userlist})
   } catch (e) {
     return res.status(500).send(e);
@@ -131,6 +133,8 @@ router.route('/user/:id').get(async (req, res) => {
         return res.status(400).json({error: e});
     }
     try {
+      req.session.user.isBooking = false;
+      req.session.user.currentBooking = {};
         const user = await getUserById(req.params.id);
         return res.render('usermanage',user);
     } catch (e) {

@@ -10,6 +10,7 @@
     let patchEventForm = $("patch-event-form");
     let rsvp = $("rsvp_form");
     let unrsvp = $("unrsvp_form");
+    let permissions = $("permissions-form");
     makeEventButton.submit(function (event) {
         event.preventDefault();
         makeEventButton.hide();
@@ -70,6 +71,7 @@
             url: '/events/' + eventInfo.attr("eventid") + "/rsvp",
             data: JSON.stringify(newinfo)
         };
+        $.ajax(requestConfig);
     });
 
     unrsvp.submit(function (event) {
@@ -81,6 +83,26 @@
             url: '/events/' + eventInfo.attr("eventid") + "/unrsvp",
             data: JSON.stringify(newinfo)
         };
+        $.ajax(requestConfig);
     });
+
+    permissions.submit(function (event) {
+        event.preventDefault();
+        let userInfo = $("#userInfo");
+        let dropdown = permissions.find("select[name='endDate']");
+        let data = {};
+        if(dropdown.val() >= 1){
+            //data.user = 
+            
+        } else {
+            data.permissions = 1;
+            let requestConfig = {
+                method: 'PATCH',
+                url: '/users/' + eventInfo.attr("thisuser"),
+                data: JSON.stringify(data)
+            };
+            $.ajax(requestConfig);
+        }
+    })
 
 })(window.jQuery);

@@ -10,6 +10,8 @@ router.route('/').get(async (req, res) => {
     for(let x = 0; x < eventslist.length; x++){
       eventslist[x].canSee = !(eventslist[x].isPrivate) || eventslist[x].organizerID == req.session.user.username || req.session.user.permissions > 0;
     }
+    req.session.user.isBooking = false;
+    req.session.user.currentBooking = {};
     return res.render('./eventlist', {title: "Events List", events: eventslist})
   } catch (e) {
     return res.status(500).send(e);
@@ -82,6 +84,8 @@ router.route('/:id').get(async (req, res) => {
         event.canRSVP = event.status > 1;
         event.hasStarted = event.startDate < (new Date());
         event.currentuser = req.session.user.username;
+        req.session.user.isBooking = false;
+        req.session.user.currentBooking = {};
         return res.render('eventmanage',event);
     } catch (e) {
         return res.status(404).json(e);

@@ -179,6 +179,7 @@ export const signInUser = async (username, userPassword) => {
         permissions: user.permissions,
         notifications: user.notifications,
         isBooking: false,
+        currentBooking: {}
       }
       return userFields;
     }
