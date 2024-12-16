@@ -25,16 +25,16 @@
         let notif = {};
         if(approvalCheckbox.prop('checked')){
             patch.status = 2;
-            notif.notifText = "Your event " + eventInfo.attr("eventname") + " was approved.";
+            notif.notiftext = "Your event " + eventInfo.attr("eventname") + " was approved.";
         } else {
             patch.status = 0;
-            notif.notifText = "Your event " + eventInfo.attr("eventname") + " was denied.";
+            notif.notiftext = "Your event " + eventInfo.attr("eventname") + " was denied.";
         }
 
         let requestConfig = {
             method: 'PATCH',
             url: '/events/' + eventInfo.attr("eventid"),
-            data: patch
+            data: JSON.stringify(patch)
         };
         $.ajax(requestConfig);
         requestConfig = {
@@ -56,7 +56,7 @@
         let requestConfig = {
             method: 'PATCH',
             url: '/events/' + eventInfo.attr("eventid"),
-            data: patch
+            data: JSON.stringify(patch)
         };
         $.ajax(requestConfig);
     });
@@ -64,7 +64,23 @@
     rsvp.submit(function (event) {
         event.preventDefault();
         let newinfo = {};
-        eventInfo.attr("currentuser"),
+        newinfo.user = eventInfo.attr("currentuser");
+        let requestConfig = {
+            method: 'PATCH',
+            url: '/events/' + eventInfo.attr("eventid") + "/rsvp",
+            data: JSON.stringify(newinfo)
+        };
+    });
+
+    unrsvp.submit(function (event) {
+        event.preventDefault();
+        let newinfo = {};
+        newinfo.user = eventInfo.attr("currentuser");
+        let requestConfig = {
+            method: 'PATCH',
+            url: '/events/' + eventInfo.attr("eventid") + "/unrsvp",
+            data: JSON.stringify(newinfo)
+        };
     });
 
 })(window.jQuery);

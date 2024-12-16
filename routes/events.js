@@ -38,6 +38,7 @@ router.route('/').get(async (req, res) => {
         [],
         "")
     } catch (e) {
+      console.log(e);
       return res.status(400).json({error: e});
     }
     try {
@@ -69,6 +70,7 @@ router.route('/:id').get(async (req, res) => {
         helpers.checkString(req.params.id, "ID");
         helpers.checkIsValidID(req.params.id, "ID");
     } catch (e) {
+      console.log(e);
         return res.status(400).json({error: e});
     }
     try {
@@ -90,6 +92,7 @@ router.route('/:id').get(async (req, res) => {
         helpers.checkString(req.params.id, "ID");
         helpers.checkIsValidID(req.params.id, "ID");
       } catch (e) {
+        console.log(e);
         return res.status(400).json({error: e});
       }
       const event = await getEventByID(req.params.id);
@@ -127,6 +130,7 @@ router.route('/:id').get(async (req, res) => {
         eventData.attendeesList,
         eventData.picture)
     } catch (e) {
+      console.log(e);
       return res.status(400).json({error: e});
     }
     try {
@@ -167,6 +171,7 @@ router.route('/:id').get(async (req, res) => {
       req.params.id = xss(req.params.id);
       helpers.checkPatchEvent(req.params.id, (await getEventByID(req.params.id)), req.body)
     } catch (e) {
+      console.log(e);
       return res.status(400).json({error: e});
     }
     try {
