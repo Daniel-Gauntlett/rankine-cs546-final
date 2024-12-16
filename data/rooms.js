@@ -115,6 +115,54 @@ export const getRoomByID = async (id) => {
     return room;
   };
 
+export const getRoomByCapacity = async (capacity) => {
+  let x = new ObjectId();
+  if (!capacity) throw 'Room capacity not provided';
+  capacity = helpers.checkCapacity(capacity)
+  const roomCollection = await rooms();
+  let roomList = await roomCollection
+    .find({capacity: { $gte: capacity }})
+    .toArray();
+  if (!roomList) throw 'Could not find rooms with this capacity';
+  for(let room of roomList)
+  {
+      room._id = room._id.toString();
+  }
+  return roomList;
+}
+
+export const getRoomByFeatures = async (featureList) => {
+  let x = new ObjectId();
+  if (!featureList) throw "Features not provided"
+  featureList = helpers.checkArrayOfStrings(featureList, "Feature list")
+  const roomCollection = await rooms();
+  let roomList = await roomCollection
+    .find({})
+    .project({ _id: 1, roomFeatures: 1 })
+    .toArray();
+  let roomIDlist = []
+  for (let room of roomList){
+    let boolVal = true
+    for (let feature of featureList) {
+      if (!room.roomFeatures.includes(feature)) {
+        boolVal = false
+        break
+      }
+    }
+    if (boolVal) roomIDlist.push(room._id)
+  }
+
+  if (roomIDlist.length === 0) throw "No rooms found with these features"
+
+  let roomMatches = []
+  for (let roomID of roomIDlist) {
+    let roomObj = await getRoomByID(roomID)
+    roomMatches.push(roomObj)
+  }
+  return roomMatches
+}
+
+
 export const getAllRooms = async () => {
     const roomCollection = await rooms();
     let roomList = await roomCollection
@@ -170,3 +218,4 @@ export const patchRoom = async (
     updatedInfo._id = updatedInfo._id.toString();
     return updatedInfo;
   };
+

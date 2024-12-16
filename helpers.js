@@ -15,6 +15,13 @@ export const checkArrayOfStrings = (data, name) =>
     return data
 };
 
+export const checkCapacity = (data) =>
+{
+  if (typeof data !== "number") throw "Room capacity must be a number"
+  if (data <= 0) throw "Room capacity must be greater than 0"
+  return data
+}
+
 export const isDate = (obj) => 
 {
     return obj instanceof Date;
@@ -358,7 +365,7 @@ export const checkCreateRoom = async (
     roomNumber = checkString(roomNumber, "Room Number")
 
     if(!roomCapacity) throw "Room capacity not given";
-    roomCapacity = checkString(roomCapacity, "Room Capacity")
+    roomCapacity = checkCapacity(roomCapacity)
 
     if(!roomFeatures) throw "Room features not given";
     roomFeatures = checkArrayOfStrings(roomFeatures, "Room Features")
@@ -368,6 +375,7 @@ export const checkCreateRoom = async (
 
     if(!roomPicture) throw "Picture URL not given"
     roomPicture = checkString(roomPicture, "Room Picture")
+    return {building, roomNumber, roomCapacity, roomFeatures, unavailableTimes, roomPicture}
 }
 
 export const checkUpdateRoom = async (
@@ -382,7 +390,7 @@ export const checkUpdateRoom = async (
     if(!roomID) throw "No id given for event";
     id = checkIsValidID(id, "event ID");
     try {
-        await checkCreateRoom(building, roomNumber,
+        return await checkCreateRoom(building, roomNumber,
             roomCapacity,
             roomFeatures,
             unavailableTimes,
@@ -403,7 +411,7 @@ export const checkPatchRoom = (
     id = checkIsValidID(id, "room ID");
     if('building' in updateObject) updateObject.building = checkString(updateObject.building);
     if('roomNumber' in updateObject) updateObject.roomNumber = checkString(updateObject.roomNumber);
-    if('roomCapacity' in updateObject) updateObject.roomCapacity = checkString(updateObject.roomCapacity);
+    if('roomCapacity' in updateObject) updateObject.roomCapacity = checkCapacity(updateObject.roomCapacity);
     if('roomFeatures' in updateObject) updateObject.roomFeatures = checkArrayOfStrings(updateObject.roomFeatures)
     if('unavaliableTimes' in updateObject) updateObject.unavailableTimes = checkDateArrayArray(updateObject.unavailableTimes)
     if('roomPicture' in updateObject) updateObject.picture = checkString(updateObject.picture);
