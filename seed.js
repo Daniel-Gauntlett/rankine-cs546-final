@@ -69,7 +69,7 @@ try
     console.dir(event2, {depth:null});
     event3 = await events.createEvent("Boba And Paint!", "Come relax and paint while sipping on boba provided by Kung Fu Tea", 
         new Date("September 10, 2024 20:00:00 EST").toJSON(), new Date("September 10, 2024 21:00:00 EST").toJSON(), false, null,
-        false, room4._id, 0, user5._id, [], [], "https://media.self.com/photos/6352ffbeef9375c6ec59085b/3:2/w_3999,h_2666,c_limit/mean-geese.png");
+        false, room4._id, 0, user5.username, [], [], "https://media.self.com/photos/6352ffbeef9375c6ec59085b/3:2/w_3999,h_2666,c_limit/mean-geese.png");
     console.dir(event3, {depth:null});
     event4 = await events.createEvent("C2GS Meeting", "Lets meet up and play tons of games :)", 
         new Date("September 10, 2024 20:00:00 EST").toJSON(), new Date("September 10, 2024 21:00:00 EST").toJSON(), true, new Date("October 16, 2024 23:00:00 EST").toJSON(), true
