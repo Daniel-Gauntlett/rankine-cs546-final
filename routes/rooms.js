@@ -17,10 +17,11 @@ router.route('/').get(async (req, res) => {
           if(room._id === event.roomID && !event.isPrivate) events.push(event.name + ": " + event.description);
         }
         room.events = events;
+        let isAdmin = false;
+        if(req.session.user.permissions >= 1) isAdmin = true;
+        room.isAdmin = isAdmin;
       }
-      let isAdmin = false;
-      if(req.session.user.permissions >= 1) isAdmin = true;
-      return res.render('./roomlist', {title: "Room List", rooms: roomList, isAdmin})
+      return res.render('./roomlist', {title: "Room List", rooms: roomList})
     } catch (e) {
       return res.status(500).send(e);
     }
