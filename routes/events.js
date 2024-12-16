@@ -6,6 +6,9 @@ const router = Router();
 router.route('/').get(async (req, res) => {
   try {
     const eventslist = await getAllEvents();
+    for(let x = 0; x < eventslist.length; x++){
+      eventslist[x].canSee = !(eventslist[x].isPrivate) || eventslist[x].organizerID == req.session.user.username || req.session.user.permissions > 0;
+    }
     return res.render('./eventlist', {title: "Events List", events: eventslist})
   } catch (e) {
     return res.status(500).send(e);
@@ -66,6 +69,7 @@ router.route('/:id').get(async (req, res) => {
     }
     try {
         const event = await getEventByID(req.params.id);
+        event.canSee = !(event.isPrivate) || event.organizerID == req.session.user.username || req.session.user.permissions > 0;
         return res.render('eventmanage',event);
     } catch (e) {
         return res.status(404).json(e);
@@ -76,6 +80,10 @@ router.route('/:id').get(async (req, res) => {
         helpers.checkIsValidID(req.params.id, "ID");
       } catch (e) {
         return res.status(400).json({error: e});
+      }
+      const event = await getEventByID(req.params.id);
+      if(!(event.isPrivate) || event.organizerID == req.session.user.username || req.session.user.permissions > 0) {
+        return res.status(403).json({error: "Unauthorized deletion"})
       }
       try {
         await removeEvent(req.params.id);
@@ -109,6 +117,10 @@ router.route('/:id').get(async (req, res) => {
       return res.status(400).json({error: e});
     }
     try {
+        const event = await getEventByID(req.params.id);
+        if(!(event.isPrivate) || event.organizerID == req.session.user.username || req.session.user.permissions > 0) {
+          return res.status(403).json({error: "Unauthorized edit"})
+        }
         const updatedEvent = await updateEvent(
             req.params.id,
             eventData.name,
@@ -143,6 +155,10 @@ router.route('/:id').get(async (req, res) => {
       return res.status(400).json({error: e});
     }
     try {
+        const event = await getEventByID(req.params.id);
+        if(!(event.isPrivate) || event.organizerID == req.session.user.username || req.session.user.permissions > 0) {
+          return res.status(403).json({error: "Unauthorized edit"})
+        }
         const patchedEvent = await patchUser(
             req.params.id, req.body
         );
