@@ -267,7 +267,17 @@ export const checkCreateUser = (
         for (let i = 0; i < notifications.length; i++){
             let testval = checkString(notifications[i], "Notification");
         }
-        return true;
+        let returnobj = {
+          username: username,
+          userPassword: userPassword,
+          firstName: firstName,
+          lastName: lastName,
+          permissions: permissions,
+          beingGranted: beingGranted,
+          usersApproving: usersApproving,
+          notifications: notifications
+        }
+        return returnobj;
 }
 export const checkPatchUser = (
     id,
