@@ -25,7 +25,7 @@ try{
     console.dir(user2, {depth: null});
     user3 = await users.createUser("faziz", "Teacher#1", "Faiyaz", "Aziz", 1, false, [], []);
     console.dir(user3, {depth: null});
-    user4 = await users.createUser("dbarrand", "Learner#2", "Drayton", "Barrand", 0, true, [user3._id], ["Pending"]);
+    user4 = await users.createUser("dbarrand", "Learner#2", "Drayton", "Barrand", 0, true, [user3.username], ["Pending"]);
     console.dir(user4, {depth: null});
     user5 = await users.createUser("jbrown", "Teacher#2", "Jeremy", "Brown", 1, false, [], [`Please look over this request made by ${user4.firstName}`]);
 }catch(e)
@@ -57,13 +57,13 @@ try
     
     event1 = await events.createEvent("General GBM", "Our general GBM, where we discuss a variety a topics each week!",
         new Date("September 10, 2024 20:00:00 EST").toJSON(), new Date("September 10, 2024 21:00:00 EST").toJSON(), true,
-        new Date("December 05, 2024 21:00:00 EST").toJSON(), false, room1._id, 1, user1._id, 
-        [user5._id], [], "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyOBFRML09gNsjdrpsbp0TxbSaQ95AOy-fIw&s");
+        new Date("December 05, 2024 21:00:00 EST").toJSON(), false, room1._id, 1, user1.username, 
+        [user5.username], [], "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyOBFRML09gNsjdrpsbp0TxbSaQ95AOy-fIw&s");
     console.dir(event1, {depth:null});
     event2 = await events.createEvent("Party For PHI", "Join the Party at our Frat House! Free Food Provided",
         new Date("November 10, 2024 20:00:00 EST").toJSON(), new Date("November 10, 2024 21:00:00 EST").toJSON(), false,
         null, true, room3._id, 2,
-        user4._id, [], [user3._id, user1._id, user2._id], "https://thefrugalchicken.com/wp-content/uploads/2023/04/Ducklings-min.jpg");
+        user4.username, [], [user3.username, user1.username, user2.username], "https://thefrugalchicken.com/wp-content/uploads/2023/04/Ducklings-min.jpg");
     console.dir(event2, {depth:null});
     event3 = await events.createEvent("Boba And Paint!", "Come relax and paint while sipping on boba provided by Kung Fu Tea", 
         new Date("September 10, 2024 20:00:00 EST").toJSON(), new Date("September 10, 2024 21:00:00 EST").toJSON(), false, null,
@@ -71,7 +71,7 @@ try
     console.dir(event3, {depth:null});
     event4 = await events.createEvent("C2GS Meeting", "Lets meet up and play tons of games :)", 
         new Date("September 10, 2024 20:00:00 EST").toJSON(), new Date("September 10, 2024 21:00:00 EST").toJSON(), true, new Date("October 16, 2024 23:00:00 EST").toJSON(), true
-        , room4._id, 0, user2._id, [user1._id, user3._id], [user4._id, user5._id], "https://static.wixstatic.com/media/ec3251_3c062e1115dd4084b24503682ec4ec73~mv2.jpg/v1/fill/w_480,h_480,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/ec3251_3c062e1115dd4084b24503682ec4ec73~mv2.jpg");
+        , room4._id, 0, user2.username, [user1.username, user3.username], [user4.username, user5.username], "https://static.wixstatic.com/media/ec3251_3c062e1115dd4084b24503682ec4ec73~mv2.jpg/v1/fill/w_480,h_480,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/ec3251_3c062e1115dd4084b24503682ec4ec73~mv2.jpg");
     console.log(await events.getAllEvents());
 }
 catch(e)
