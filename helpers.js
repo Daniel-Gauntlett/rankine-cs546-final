@@ -129,9 +129,9 @@ export const checkCreateEvent = (
     if(isRecurring && (new Date(recurUntil) < new Date(startDate) || new Date(recurUntil) < new Date(endDate))) throw "Recurring date is before end date or start date";
     roomID = checkIsValidID(roomID, "Room ID");
     if(typeof status !== "number" || (status !== 0 && status !== 1 && status !== 2)) throw "Status isn't a number";
-    organizerID = checkIsValidID(organizerID, "Organizer ID");
-    rsvpList = checkIsValidIDs(rsvpList, "RSVP list");
-    attendeesList = checkIsValidIDs(attendeesList, "Attendees list");
+    organizerID = checkString(organizerID, "Organizer ID");
+    rsvpList = checkArrayOfStrings(rsvpList, "RSVP list");
+    attendeesList = checkArrayOfStrings(attendeesList, "Attendees list");
     picture = checkString(picture, "Picture link");
     return {name, description, startDate, endDate, isRecurring, recurUntil, isPrivate, roomID, status, organizerID, rsvpList, attendeesList, picture};
   }
