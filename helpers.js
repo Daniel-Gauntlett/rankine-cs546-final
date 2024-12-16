@@ -115,7 +115,7 @@ export const checkCreateEvent = (
     if(recurUntil && !isRecurring) throw "Recur until date given for nonrecurring event";
     if(typeof isPrivate !== "boolean") throw "Private is not a valid boolean for event";
     if(!roomID) throw "No room ID is given for event";
-    if(!status) throw "No status is given for event";
+    if(typeof status !== "number" && !status) throw "No status is given for event";
     if(!organizerID) throw "No organizer ID is given for event";
     if(!rsvpList) throw "No rsvp list is given for event";
     if(!attendeesList) throw "No attendees list is given for event";
