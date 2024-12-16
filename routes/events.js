@@ -75,6 +75,7 @@ router.route('/:id').get(async (req, res) => {
         event.hasRSVPed = event.rsvpList.includes(req.session.user.username);
         event.canRSVP = event.status > 1;
         event.hasStarted = event.startDate < (new Date());
+        event.currentuser = req.session.user.username;
         return res.render('eventmanage',event);
     } catch (e) {
         return res.status(404).json(e);

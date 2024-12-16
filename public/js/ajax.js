@@ -7,6 +7,9 @@
     let approvalForm = $('#approve_form');
     let approvalCheckbox = $('#approval-checkbox');
     let eventInfo = $("#eventInfo");
+    let patchEventForm = $("patch-event-form");
+    let rsvp = $("rsvp_form");
+    let unrsvp = $("unrsvp_form");
     makeEventButton.submit(function (event) {
         event.preventDefault();
         makeEventButton.hide();
@@ -19,18 +22,49 @@
     approvalForm.submit(function (event) {
         event.preventDefault();
         let patch = {};
+        let notif = {};
         if(approvalCheckbox.prop('checked')){
             patch.status = 2;
+            notif.notifText = "Your event " + eventInfo.attr("eventname") + " was approved.";
         } else {
             patch.status = 0;
+            notif.notifText = "Your event " + eventInfo.attr("eventname") + " was denied.";
         }
-        console.log(typeof(patch.status));
+
         let requestConfig = {
             method: 'PATCH',
-            url: '/events/' + eventInfo.attr("class"),
+            url: '/events/' + eventInfo.attr("eventid"),
             data: patch
+        };
+        $.ajax(requestConfig);
+        requestConfig = {
+            method: 'POST',
+            url: '/users/notification/' + eventInfo.attr("organizer"),
+            data: notif
         };
         $.ajax(requestConfig); 
     })
+
+    patchEventForm.submit(function (event) {
+        event.preventDefault();
+        let patch = {};
+        patch.status = 1;
+        patch.name = patchEventForm.find("input[name='name']").val();
+        patch.description = patchEventForm.find("input[name='description']").val();
+        patch.startDate = patchEventForm.find("input[name='startDate']").val();
+        patch.endDate = patchEventForm.find("input[name='endDate']").val();
+        let requestConfig = {
+            method: 'PATCH',
+            url: '/events/' + eventInfo.attr("eventid"),
+            data: patch
+        };
+        $.ajax(requestConfig);
+    });
+
+    rsvp.submit(function (event) {
+        event.preventDefault();
+        let newinfo = {};
+        eventInfo.attr("currentuser"),
+    });
 
 })(window.jQuery);
