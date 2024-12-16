@@ -369,6 +369,10 @@ export const checkCreateRoom = async (
 
     if(!roomFeatures) throw "Room features not given";
     roomFeatures = checkArrayOfStrings(roomFeatures, "Room Features")
+    for(let i = 0; i < roomFeatures.length; i++)
+    {
+      roomFeatures[i] = roomFeatures[i].toLowerCase();
+    }
 
     if(!unavailableTimes)
     unavailableTimes = checkDateArrayArray(unavailableTimes, "Date Array")
@@ -412,7 +416,14 @@ export const checkPatchRoom = (
     if('building' in updateObject) updateObject.building = checkString(updateObject.building);
     if('roomNumber' in updateObject) updateObject.roomNumber = checkString(updateObject.roomNumber);
     if('roomCapacity' in updateObject) updateObject.roomCapacity = checkCapacity(updateObject.roomCapacity);
-    if('roomFeatures' in updateObject) updateObject.roomFeatures = checkArrayOfStrings(updateObject.roomFeatures)
+    if('roomFeatures' in updateObject)
+    {
+      updateObject.roomFeatures = checkArrayOfStrings(updateObject.roomFeatures)
+      for(let i = 0; i < roomFeatures.length; i++)
+        {
+          roomFeatures[i] = roomFeatures[i].toLowerCase();
+        }
+    }
     if('unavaliableTimes' in updateObject) updateObject.unavailableTimes = checkDateArrayArray(updateObject.unavailableTimes)
     if('roomPicture' in updateObject) updateObject.picture = checkString(updateObject.picture);
     return updateObject;

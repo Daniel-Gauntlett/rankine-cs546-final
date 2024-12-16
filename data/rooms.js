@@ -121,7 +121,7 @@ export const getRoomByCapacity = async (capacity) => {
   capacity = helpers.checkCapacity(capacity)
   const roomCollection = await rooms();
   let roomList = await roomCollection
-    .find({capacity: { $gte: capacity }})
+    .find({roomCapacity: { $gte: capacity }})
     .toArray();
   if (!roomList) throw 'Could not find rooms with this capacity';
   for(let room of roomList)
@@ -135,6 +135,10 @@ export const getRoomByFeatures = async (featureList) => {
   let x = new ObjectId();
   if (!featureList) throw "Features not provided"
   featureList = helpers.checkArrayOfStrings(featureList, "Feature list")
+  for(let i = 0; i < featureList.length; i++)
+  {
+    featureList[i] = featureList[i].toLowerCase();
+  }
   const roomCollection = await rooms();
   let roomList = await roomCollection
     .find({})
@@ -156,7 +160,7 @@ export const getRoomByFeatures = async (featureList) => {
 
   let roomMatches = []
   for (let roomID of roomIDlist) {
-    let roomObj = await getRoomByID(roomID)
+    let roomObj = await getRoomByID(roomID.toString())
     roomMatches.push(roomObj)
   }
   return roomMatches
