@@ -1,12 +1,23 @@
 import {Router} from 'express';
 import * as helpers from '../helpers.js';
 import { createRoom, getAllRooms, getRoomByID, removeRoom } from '../data/rooms.js';
+import * as events from '../data/events.js';
 const router = Router();
 import xss from 'xss';
 
 router.route('/').get(async (req, res) => {
   try {
-      const roomList = await getAllRooms();
+      let roomList = await getAllRooms();
+      let eventList = await events.getAllEvents();
+      for(let room of roomList)
+      {
+        let events = [];
+        for(let event of eventList)
+        {
+          if(room._id === event.roomID && !event.isPrivate) events.push(event.name + ": " + event.description);
+        }
+        room.events = events;
+      }
       return res.render('./roomlist', {title: "Room List", rooms: roomList})
     } catch (e) {
       return res.status(500).send(e);
