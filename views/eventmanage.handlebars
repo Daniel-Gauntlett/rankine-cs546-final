@@ -1,0 +1,32 @@
+
+<p id="event">Event Name: {{name}},
+Event Description: {{description}},
+Start Date: {{startDate}},
+End Date: {{endDate}},
+Event Picture: {{picture}}</p>
+
+<form action="/events/" method="PATCH" id="patch-event-form">
+    <label for = "name">
+        Event Name:
+        <input type="text" id="name" name = "name">
+    </label>
+    <label for = "description">
+        Description:
+        <input type="text" id="description" name = "description" >
+    </label>
+    <label>
+      Start Date:
+      <input type="date" name="startDate">
+    </label>
+    <label>
+      End Date:
+      <input type="date" name="endDate">
+    </label>
+    <label>
+        <button type="submit" name="edit_button" id="edit_button">Submit Event Edit</button>
+    </label>
+</form>
+
+<form action="/events/" method="DELETE" id="deleteEvent">
+    <button type="submit" name="delete_button" id="delete_button">Delete Event</button>
+</form>
