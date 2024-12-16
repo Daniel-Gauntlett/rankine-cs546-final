@@ -1,10 +1,54 @@
+<div id="event-list">
 {{#each events}}
-    {{#if isPrivate}}
-
-    {{else}}
-        <p id="event">Name: {{name}}
+    {{#if canSee}}
+     <p id="event">Name: {{name}}
            Start Date: {{startDate}}
            End Date: {{endDate}}</p>
            <a href="/events/{{_id}}">Go To Event</a>
     {{/if}}
 {{/each}}
+</div>
+<div id="make_event_button">
+<form action="/events/" method="POST" id="confirm_make_event">
+    <button type="submit" name="confirm_make_event_button" id="confirm_make_event_button">Create an event</button>
+</form>
+</div>
+<form action="/events/" method="POST" id="make_event_form" hidden>
+    <label for = "name">
+        Event Name:
+        <input type="text" id="name" name = "name">
+    </label>
+    <label for = "description">
+        Description:
+        <input type="text" id="description" name = "description" >
+    </label>
+    <label>
+      Start Date:
+      <input type="date" name="startDate">
+    </label>
+    <label>
+      End Date:
+      <input type="date" name="endDate">
+    </label>
+    <label>
+        Is Recurring?
+        <input type="checkbox" id="isRecurringCheckbox" name="isRecurring" value=true>
+    </label>
+    <label id="recurDateBox" hidden>
+        Recur Until: 
+        <input type="date" name="recurUntil">
+    </label>
+    <label>
+        Is Private?
+        <input type="checkbox" name="isPrivate" value=true>
+    </label>
+    <label>
+        <button type="submit" name="submit_button" id="submit_button">Book Room</button>
+    </label>
+</form>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+crossorigin="anonymous"></script>
+<script src="../public/js/ajax.js"></script>
