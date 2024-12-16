@@ -262,9 +262,7 @@ export const checkCreateUser = async (
         if (permissions !== 0 && permissions !== 1 && permissions !== 2) throw "Permissions is not a valid integer";
         if (typeof beingGranted !== "boolean") throw "Boolean not provided for being granted status";
         if (!Array.isArray(usersApproving)) throw "Given users approving list is not an array";
-        for (let i = 0; i < usersApproving.length; i++){
-            let testval = checkIsValidID(usersApproving[i], "Administrator Account ID");
-        }
+        let testval = checkArrayOfStrings(usersApproving);
         if (!Array.isArray(notifications)) throw "Given notifications is not an array";
         for (let i = 0; i < notifications.length; i++){
             let testval = checkString(notifications[i], "Notification");
