@@ -13,17 +13,7 @@ export const createUser = async (
     usersApproving,
     notifications
 ) => {
-    let test = helpers.checkCreateUser(username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
-    let newUser = {
-        username,
-        userPassword,
-        firstName,
-        lastName,
-        permissions,
-        beingGranted,
-        usersApproving,
-        notifications 
-    }
+    let newUser = helpers.checkCreateUser(username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
     const userCollection = await users();
     const insertInfo = await userCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not add user';
