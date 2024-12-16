@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import * as helpers from '../helpers.js';
-import { createUser, getUserById, updateUser, removeUser, updateNotifications, patchUser, getAllUsers } from '../data/users.js';
+import { createUser, getUserById, updateUser, removeUser, updateNotifications, patchUser, getAllUsers, signInUser, signUpUser } from '../data/users.js';
 const router = Router();
 
 router.route('/').get(async (req, res) => {
@@ -66,6 +66,30 @@ router
     } catch (e) {
       console.log(e);
       res.status(400).render('login',{error: "Incorrect username or password"});
+    }
+  });
+
+  router
+  .route('/signupuser')
+  .get(async (req, res) => {
+    res.render('signupuser',{});
+  })
+  .post(async (req, res) => {
+    if(req.body.password != req.body.confirmPassword){
+      return res.status(400).render('signupuser',{error: "Passwords must match"});
+    }
+    try {
+      helpers.checkSignUpUser(req.body.username, req.body.userPassword, req.body.firstName, req.body.lastName);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).render('signupuser',{error: e});
+    }
+    try {
+      req.session.user = await signUpUser(req.body.username, req.body.userPassword, req.body.firstName, req.body.lastName);
+      res.redirect("/");
+    } catch (e) {
+      console.log(e);
+      res.status(400).render('signupuser',{error: e});
     }
   });
 
