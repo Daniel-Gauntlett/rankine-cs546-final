@@ -2,6 +2,7 @@ import {Router} from 'express';
 import * as helpers from '../helpers.js';
 import { createRoom, getAllRooms, getRoomByID, removeRoom } from '../data/rooms.js';
 const router = Router();
+import xss from 'xss';
 
 router.route('/').get(async (req, res) => {
   try {
@@ -12,6 +13,7 @@ router.route('/').get(async (req, res) => {
     }
 })
 .post(async (req, res) => {
+    Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
     let roomData = req.body;
     if (!roomData || Object.keys(roomData).length === 0) {
       return res
@@ -41,6 +43,7 @@ router.route('/').get(async (req, res) => {
 
 router.route('/:id').get(async (req, res) => {
     try {
+        req.params.id = xss(req.params.id);
         helpers.checkString(req.params.id, "ID");
         helpers.checkIsValidID(req.params.id, "ID");
     } catch (e) {
@@ -54,6 +57,7 @@ router.route('/:id').get(async (req, res) => {
     }
 }).delete(async (req, res) => {
     try {
+        req.params.id = xss(req.params.id);
         helpers.checkString(req.params.id, "ID");
         helpers.checkIsValidID(req.params.id, "ID");
     } catch (e) {
@@ -66,6 +70,7 @@ router.route('/:id').get(async (req, res) => {
         return res.status(404).json(e);
     }
 }).put(async (req, res) => {
+  Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
   let roomData = req.body;
   if (!roomData || Object.keys(roomData).length === 0) {
     return res
