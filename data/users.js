@@ -160,8 +160,8 @@ export const signInUser = async (username, userPassword) => {
     let userCollection = await users();
     let user = await userCollection.findOne({username: username});
     if (!user) throw "Either the username or password is invalid";
-    let userPass = user.password;
-    let truthval = await bcrypt.compare(password, userPass);
+    let userPass = user.userPassword;
+    let truthval = await bcrypt.compare(userPassword, userPass);
     if (truthval){
       let userFields = {
         username: user.username,

@@ -70,7 +70,7 @@ router.route('/:id').get(async (req, res) => {
     try {
         const event = await getEventByID(req.params.id);
         event.canSee = !(event.isPrivate) || event.organizerID == req.session.user.username || req.session.user.permissions > 0;
-        event.canApprove = req.session.user.permissions > 0;
+        event.canApprove = req.session.user.permissions > 0 && event.status == 1;
         event.canEdit = event.organizerID == req.session.user.username;
         event.hasRSVPed = event.rsvpList.includes(req.session.user.username);
         event.canRSVP = event.status > 1;
@@ -167,7 +167,7 @@ router.route('/:id').get(async (req, res) => {
         const patchedEvent = await patchUser(
             req.params.id, req.body
         );
-        return res.json(patchedEvent);
+        res.redirect("/events/" + req.params.id)
       } catch (e) {
         console.log(e);
         return res.sendStatus(500);
