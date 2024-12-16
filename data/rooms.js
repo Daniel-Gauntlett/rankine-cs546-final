@@ -115,12 +115,30 @@ export const getRoomByID = async (id) => {
     return room;
   };
 
+export const getRoomByCapacity = async (capacity) => {
+  let x = new ObjectId();
+  if (!capacity) throw 'Room capacity not provided';
+  if (typeof capacity !== 'number') throw 'capacity must be a number'
+  if (capacity <= 0) throw 'capacity must be greater than 0'
+  const roomCollection = await rooms();
+  let roomList = await roomCollection
+    .find({capacity: { $gte: capacity }})
+    .project({_id: 1, name: 1, capacity: 1})
+    .toArray();
+  if (!roomList) throw 'Could not get all rooms';
+  for(let room of roomList)
+  {
+      room._id = room._id.toString();
+  }
+  return roomList;
+}
+
 export const getAllRooms = async () => {
     const roomCollection = await rooms();
     let roomList = await roomCollection
-        .find({})
-        .project({_id: 1, name: 1})
-        .toArray();
+      .find({})
+      .project({_id: 1, name: 1})
+      .toArray();
     if (!roomList) throw 'Could not get all rooms';
     for(let room of roomList)
     {
@@ -171,3 +189,4 @@ export const patchRoom = async (
     updatedInfo._id = updatedInfo._id.toString();
     return updatedInfo;
   };
+
