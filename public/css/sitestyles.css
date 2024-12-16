@@ -19,11 +19,11 @@ h3 {
     text-align: center;
 }
 p {
-    font-size: 2rem;
+    font-size: 1rem;
     line-height: 2;
 }
 li {
-    font-size: 2rem;
+    font-size: 1rem;
 }
 label {
     font-weight: bold;
@@ -53,8 +53,8 @@ input[type=password]{
     Color: #070D0D;
 }
 img{
-    height: 162px;
-    width: 288px;
+    height: 243px;
+    width: 432px;
 }
 .fade-in {
 	opacity: 1;
