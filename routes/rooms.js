@@ -18,7 +18,9 @@ router.route('/').get(async (req, res) => {
         }
         room.events = events;
       }
-      return res.render('./roomlist', {title: "Room List", rooms: roomList})
+      let isAdmin = false;
+      if(req.session.user.permissions >= 1) isAdmin = true;
+      return res.render('./roomlist', {title: "Room List", rooms: roomList, isAdmin})
     } catch (e) {
       return res.status(500).send(e);
     }
