@@ -242,8 +242,12 @@ export const checkCreateUser = (
         if (!userPassword) throw "No password given for the user";
         if (!firstName) throw "No first name given for the user";
         if (!lastName) throw "No last name given for the user";
-        if (!permissions) throw "No permissions supplied for the user";
-        if (!beingGranted) throw "No being granted status given for the user";
+        if (permissions !== 0){
+          if (!permissions) throw "No permissions supplied for the user";
+        }
+        if (beingGranted !== false){
+          if (!beingGranted) throw "No being granted status given for the user";
+        }
         if (!usersApproving) throw "No users approving array provided for the user";
         if (!notifications) throw "No notifications array provided for the user";
         username = checkString(username, "Username");
