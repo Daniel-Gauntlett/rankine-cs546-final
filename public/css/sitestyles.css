@@ -30,7 +30,7 @@ label {
 button[type=submit]{
     background-color: #FFFAFA;
     color: #070D0D;
-    padding: 10px 20px;
+    padding: 5px 15px;
     font-size: 16px;
 }
 input[type=text]{
