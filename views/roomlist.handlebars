@@ -28,7 +28,7 @@
 	  </form>
     <!--- Only show this if user is admin, maybe inject with Ajax? Should link to roommanage page for specific room ID-->
     <div class="showEditButton">
-    <form action="/rooms/" method="POST" class="editRoom">
+    <form action="/rooms/{{_id}}" method="GET" class="editRoom">
     <button type="submit" name="editRoomButton" class="editRoomButton">Manage This Room</button>
     </form>
     </div>

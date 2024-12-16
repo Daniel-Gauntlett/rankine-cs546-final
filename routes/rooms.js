@@ -62,7 +62,7 @@ router.route('/:id').get(async (req, res) => {
     }
     try {
         const room = await getRoomByID(req.params.id);
-        return res.render('roommmanage',room);
+        return res.render('roommanage',room);
     } catch (e) {
         return res.status(404).json(e);
     }
