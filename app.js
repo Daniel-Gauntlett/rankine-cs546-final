@@ -30,7 +30,7 @@ app.get('/events/', (req, res, next) => {
   if(!req.session.user) res.redirect("/users/user/signinuser");
   else next();
 });
-app.get('rooms/', (req, res, next) => {
+app.get('/rooms/', (req, res, next) => {
   if(!req.session.user) res.redirect("/users/user/signinuser");
   else next();
 });

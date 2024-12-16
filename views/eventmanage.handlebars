@@ -4,15 +4,25 @@ Event Description: {{description}},
 Start Date: {{startDate}},
 End Date: {{endDate}},
 Event Picture: {{picture}}</p>
-
+{{#if canRSVP}}
 {{#if hasRSVPed}}
 <p>You've RSVPed for this event!</p>
-<form action="/events/" method="PATCH" id="unrsvp_form">
+<form action="/events/{{_id}}/unrsvp" method="PATCH" id="unrsvp_form">
     <button type="submit" name="rsvp_button" id="unrsvp_button">UnRSVP for this event</button>
 </form>
 {{#else}}
-<form action="/events/" method="PATCH" id="rsvp_form">
+<form action="/events/{{_id}}/rsvp" method="PATCH" id="rsvp_form">
     <button type="submit" name="rsvp_button" id="rsvp_button">RSVP for this event</button>
+</form>
+{{/if}}
+{{/if}}
+{{#if canApprove}}
+<form action="/events/" method="PATCH" id="approve_form">
+    <label for = "name">
+        Approval:
+        <input type="checkbox" id="approval-checkbox" name="approval">
+    </label>
+    <button type="submit" name="approve_form" id="approve_form">Submit approval</button>
 </form>
 {{/if}}
 

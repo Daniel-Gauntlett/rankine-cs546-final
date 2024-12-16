@@ -13,8 +13,7 @@
     <button type="submit" name="confirm_make_event_button" id="confirm_make_event_button">Create an event</button>
 </form>
 </div>
-<div id="make_event_form" hidden>
-<form action="/events/" method="POST" id="post-event-form">
+<form action="/events/" method="POST" id="make_event_form">
     <label for = "name">
         Event Name:
         <input type="text" id="name" name = "name">
@@ -33,7 +32,7 @@
     </label>
     <label>
         Is Recurring?
-        <input type="checkbox" id="isRecurringCheckbox" name="isRecurring">
+        <input type="checkbox" id="isRecurringCheckbox" name="isRecurring" value=true>
     </label>
     <label id="recurDateBox" hidden>
         Recur Until: 
@@ -41,10 +40,9 @@
     </label>
     <label>
         Is Private?
-        <input type="checkbox" name="isPrivate">
+        <input type="checkbox" name="isPrivate" value=true>
     </label>
     <label>
         <button type="submit" name="submit_button" id="submit_button">Book Room</button>
     </label>
 </form>
-</div>
