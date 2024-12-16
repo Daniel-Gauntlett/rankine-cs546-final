@@ -2,6 +2,7 @@ import {Router} from 'express';
 import * as helpers from '../helpers.js';
 import { createUser, getUserById, updateUser, removeUser, updateNotifications, patchUser, getAllUsers, signInUser, signUpUser } from '../data/users.js';
 const router = Router();
+import xss from 'xss';
 
 router.route('/').get(async (req, res) => {
   try {
@@ -11,6 +12,7 @@ router.route('/').get(async (req, res) => {
     return res.status(500).send(e);
   }
 }).post(async (req, res) => {
+    Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
     let userData = req.body;
     if (!userData || Object.keys(userData).length === 0) {
       return res
@@ -55,6 +57,7 @@ router
   })
   .post(async (req, res) => {
     try {
+      Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
       helpers.checkSignInUser(req.body.username, req.body.password);
     } catch (e) {
       console.log(e);
@@ -75,6 +78,7 @@ router
     res.render('signupuser',{});
   })
   .post(async (req, res) => {
+    Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
     if(req.body.password != req.body.confirmPassword){
       return res.status(400).render('signupuser',{error: "Passwords must match"});
     }
@@ -94,8 +98,10 @@ router
   });
 
   router.route('/notification/:id').post(async (req, res) => {
+    Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
     let newNotif = req.body.notiftext;
     try {
+        req.params.id = xss(req.params.id);
         helpers.checkString(req.params.id, "ID");
         helpers.checkIsValidID(req.params.id, "ID");
         helpers.checkString(newNotif, "Notification")
@@ -118,6 +124,7 @@ router.route('/signoutuser').get(async (req, res) => {
 
 router.route('/user/:id').get(async (req, res) => {
     try {
+        req.params.id = xss(req.params.id);
         helpers.checkString(req.params.id, "ID");
         helpers.checkIsValidID(req.params.id, "ID");
     } catch (e) {
@@ -131,6 +138,7 @@ router.route('/user/:id').get(async (req, res) => {
     }
 }).delete(async (req, res) => {
     try {
+        req.params.id = xss(req.params.id);
         helpers.checkString(req.params.id, "ID");
         helpers.checkIsValidID(req.params.id, "ID");
     } catch (e) {
@@ -143,6 +151,7 @@ router.route('/user/:id').get(async (req, res) => {
         return res.status(404).json(e);
     }
 }).put(async (req, res) => {
+    Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
     let userData = req.body;
     if (!userData || Object.keys(userData).length === 0) {
       return res
@@ -179,6 +188,7 @@ router.route('/user/:id').get(async (req, res) => {
         return res.sendStatus(500);
       }
 }).patch(async (req, res) => {
+    Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
     let userData = req.body;
     if (!userData || Object.keys(userData).length === 0) {
       return res
@@ -186,6 +196,7 @@ router.route('/user/:id').get(async (req, res) => {
         .json({error: 'There are no fields in the request body'});
     }
     try {
+      req.params.id = xss(req.params.id);
       await helpers.checkPatchUser(req.params.id, (await getUserById(req.params.id)), req.body)
     } catch (e) {
       return res.status(400).json({error: e});
