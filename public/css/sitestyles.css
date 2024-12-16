@@ -1,10 +1,10 @@
-#event{
+.event{
     color: red;
 }
 .room{
     color: green;
 }
-#user{
+.user{
     color: blue;
 }
 body {
