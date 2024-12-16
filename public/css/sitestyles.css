@@ -7,3 +7,73 @@
 #user{
     color: blue;
 }
+body {
+    font-size: 14pt;
+    font-family: 'Times New Roman', Times, serif;
+    background: #C0C0C0;
+}
+h1 {
+    font-size: 30pt;
+    text-decoration: underline;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+h2 {
+    font-size: 1rem;
+    text-decoration: underline;
+}
+h3 {
+    font-size: 1rem;
+    text-align: center;
+}
+p {
+    font-size: 1rem;
+    line-height: 2;
+}
+label {
+    font-weight: bold;
+}
+button[type=submit]{
+    background-color: #FFFAFA;
+    color: #070D0D;
+}
+input[type=text]{
+    background-color: #E0E0E0;
+    Color: #070D0D;
+}
+input[type=number]{
+    background-color: #E0E0E0;
+    Color: #070D0D;
+}
+input[type=date]{
+    background-color: #E0E0E0;
+    Color: #070D0D;
+}
+input[type=checkbox]{
+    background-color: #E0E0E0;
+    Color: #070D0D;
+}
+input[type=password]{
+    background-color: #E0E0E0;
+    Color: #070D0D;
+}
+img{
+    height: 324px;
+    width: 576px;
+}
+.fade-in {
+	opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 2s;
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
