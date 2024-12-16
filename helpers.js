@@ -85,7 +85,7 @@ export const checkIsValidPassword = (password, saltRounds) =>
   else{
     throw "Given password is invalid, must include an uppercase character, a special character, and a number.";
   }
-  let hash = bcrypt.hash((passwordVal, saltRounds));
+  let hash = bcrypt.hash(password, saltRounds);
   return hash;
 }
 
