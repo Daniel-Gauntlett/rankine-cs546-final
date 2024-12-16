@@ -33,21 +33,23 @@ try{
     console.error(e);
 }
 try{
-    room1 = await rooms.createRoom("Gateway South", "221", "10", ["whiteboard"], 
+    room1 = await rooms.createRoom("Gateway South", "221", 10, ["whiteboard"], 
         [[new Date("September 10, 2024 23:00:00 EST"), new Date("September 11, 2024 6:00:00 EST"), true, new Date("December 05, 2024 21:00:00 EST")]],
         "https://images.ctfassets.net/mviowpldu823/fd78c734b7cc1047b71dc18fcca5870c/d4fd90b6688bc528dbe64c7d73eb6179/Sam_20Kim_20-_20Lecture_20Hall_2011.JPG");
     console.dir(room1, {depth: null});
-    room2 = await rooms.createRoom("Babbio", "122", "70", ["Projectors", "Desk Chargers"], 
+    room2 = await rooms.createRoom("Babbio", "122", 70, ["projectors", "desk chargers"], 
         [[new Date("September 10, 2024 23:00:00 EST"), new Date("September 11, 2024 6:00:00 EST"), false]], 
         "https://env-team.com/wp-content/uploads/2018/05/wide2-415x237.jpg");
     console.dir(room2, {depth: null});
-    room3 = await rooms.createRoom("Howe", "402", "120", ["Projector", "Presenter Desk"],
+    room3 = await rooms.createRoom("Howe", "402", 120, ["projectors", "presenter Desk"],
         [[new Date("September 10, 2024 23:00:00 EST"), new Date("September 11, 2024 6:00:00 EST"), true, new Date("December 05, 2024 21:00:00 EST")], [new Date("September 11, 2024 12:00:00 EST"), new Date("September 11, 2024 13:30:00 EST"), true, new Date("December 05, 2024 21:00:00 EST")]], 
         "https://pbs.twimg.com/media/CR3QkF-W0AEByyX?format=jpg&name=4096x4096");
     console.dir(room3, {depth: null});
-    room4 = await rooms.createRoom("Kidde", "360", "50", ["Multiple Screens", "Projectors"], 
+    room4 = await rooms.createRoom("Kidde", "360", 50, ["multiple Screens", "projectors"], 
         [], "https://freight.cargo.site/t/original/i/00f5be24e00f8444f50b7ec9faf3a0b02becf1e6665b0f0756440ec699f1ba71/Stevens-Tech._Auditorium_03.jpg");
     console.dir(room4, {depth:null});
+    console.dir(await rooms.getRoomByCapacity(30));
+    console.dir(await rooms.getRoomByFeatures(["Projectors"]))
 }catch(e)
 {
     console.error(e);
