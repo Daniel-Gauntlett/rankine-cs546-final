@@ -1,12 +1,4 @@
-#event{
-    color: red;
-}
-#room{
-    color: green;
-}
-#user{
-    color: blue;
-}
+
 body {
     font-size: 14pt;
     font-family: 'Times New Roman', Times, serif;
@@ -27,8 +19,11 @@ h3 {
     text-align: center;
 }
 p {
-    font-size: 1rem;
+    font-size: 2rem;
     line-height: 2;
+}
+li {
+    font-size: 2rem;
 }
 label {
     font-weight: bold;
@@ -58,8 +53,8 @@ input[type=password]{
     Color: #070D0D;
 }
 img{
-    height: 324px;
-    width: 576px;
+    height: 162px;
+    width: 288px;
 }
 .fade-in {
 	opacity: 1;
