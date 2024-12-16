@@ -1,19 +1,25 @@
 {{#each rooms}}
-    <p class = "room">Building: {{building}},
-    Room #: {{roomNumber}},
-    Room Capacity: {{roomCapacity}},
-    Room Features: {{roomFeatures}},
+    <p class = "room">Building: {{building}}
+    <br>
+    Room #: {{roomNumber}}
+    <br>
+    Room Capacity: {{roomCapacity}}
+    <br>
+    Room Features: {{roomFeatures}}
+    <br>
     Events: <ol>
       {{#each events}}
          <li>{{this}}</li>
       {{/each}}
-    </ol>,
+    </ol>
+    <br>
     Unavailable Times: <ul>
     {{#each  unavailableTimes}}
         <li>{{this}}</li>
     {{/each}}
-    </ul>,
-    Room Picture:<img class="eventImage"
+    </ul>
+    <br>
+    <img class="eventImage"
                           alt="{{building}} {{roomNumber}} Image"
                           src="{{roomPicture}}"
                           ></p>
