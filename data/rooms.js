@@ -12,9 +12,9 @@ export const calculateUnavailableTimes = (times) => {
   //If isRecurring is true, use while loop to keep duplicating start and end time + 1 week until end date, add each one to return array
   //Return pair list
   let unavailableTimes = []
-  for(let array in times) {
+  for(let array of times) {
     let startDate,  endDate, isRecurring, recurringEndDate
-    if(array.length = 3) [startDate, endDate, isRecurring] = array
+    if(array.length === 3) [startDate, endDate, isRecurring] = array
     else if (array.length = 4) [startDate, endDate, isRecurring, recurringEndDate] = array
     unavailableTimes.push([startDate, endDate])
     if (isRecurring) {
@@ -41,6 +41,7 @@ export const createRoom = async (
     unavailableTimesList,
     roomPicture
   ) => {
+    let unavailableTimes
     try {
       await helpers.checkCreateRoom(building,roomNumber,roomCapacity,roomFeatures,unavailableTimesList,roomPicture);
       unavailableTimes = calculateUnavailableTimes(unavailableTimesList)
@@ -48,7 +49,7 @@ export const createRoom = async (
     catch (e) {
       throw e;
     }
-    let newroom = {
+    let newRoom = {
       building,
       roomNumber,
       roomCapacity,
@@ -56,7 +57,7 @@ export const createRoom = async (
       unavailableTimes,
       roomPicture
     };
-    const rooomCollection = await rooms();
+    const roomCollection = await rooms();
     const insertInfo = await roomCollection.insertOne(newRoom);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
       throw 'Could not add room';

@@ -39,7 +39,9 @@ export const checkDateArray = (data, name) =>
 
 export const checkDateArrayArray = (data, name) =>
 {
-    for(let array of data){
+  if(!Array.isArray(data)) throw `${name} isn't a valid date array`
+  if(data.length === 0) return data
+  for(let array of data){
         checkDateArray(array, name)
     }
     return data
@@ -348,7 +350,7 @@ export const checkCreateRoom = async (
     if(!roomFeatures) throw "Room features not given";
     roomFeatures = checkArrayOfStrings(roomFeatures, "Room Features")
 
-    if(!unavailableTimes) throw "Times not given";
+    if(!unavailableTimes)
     unavailableTimes = checkDateArrayArray(unavailableTimes, "Date Array")
 
     if(!roomPicture) throw "Picture URL not given"
