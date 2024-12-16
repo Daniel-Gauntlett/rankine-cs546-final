@@ -5,7 +5,10 @@ Room Capacity: {{roomCapacity}},
 Room Features: {{roomFeatures}},
 Events: {{events}},
 Unavailable Times: {{unavailableTimes}},
-Room Picture: {{roomPicture}}</p>
+Room Picture: <img class="eventImage"
+                          alt="{{building}} {{roomNumber}} Image"
+                          src="{{roomPicture}}"
+                          ></p>
 
 <form action="/rooms/" method="PATCH" id="patch-room-form">
     <label for = "building">
