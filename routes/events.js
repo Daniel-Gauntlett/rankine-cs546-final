@@ -155,7 +155,7 @@ router.route('/:id').get(async (req, res) => {
         .json({error: 'There are no fields in the request body'});
     }
     try {
-      helpers.checkPatchEvent(req.params.id, (await getUserById(req.params.id)), req.body)
+      helpers.checkPatchEvent(req.params.id, (await getEventByID(req.params.id)), req.body)
     } catch (e) {
       return res.status(400).json({error: e});
     }
