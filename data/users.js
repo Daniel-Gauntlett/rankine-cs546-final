@@ -13,7 +13,7 @@ export const createUser = async (
     usersApproving,
     notifications
 ) => {
-    let newUser = helpers.checkCreateUser(username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
+    let newUser = await helpers.checkCreateUser(username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
     const userCollection = await users();
     const insertInfo = await userCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not add user';
@@ -68,7 +68,7 @@ export const updateUser = async (
     notifications
 ) => {
     id = helpers.checkIsValidID(id, "id");
-    let test = helpers.checkCreateUser(username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
+    let test = await helpers.checkCreateUser(username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
     let newUser = {
         username,
         userPassword,
@@ -95,7 +95,7 @@ export const patchUser = async (
     updateObject
 ) => {
     let originalUser = await getUserById(id);
-    updateObject = helpers.checkPatchEvent(id, originalUser, updateObject);
+    updateObject = helpers.checkPatchUser(id, originalUser, updateObject); //Changed to checkpatchuser
     let newUser = {
         ...originalUser,
         ...updateObject
@@ -133,7 +133,7 @@ export const signUpUser = async (
     firstName,
     lastName,
   ) => {
-    let testval = helpers.checkSignUpUser(username, userPassword, firstName, lastName);
+    let testval = await helpers.checkSignUpUser(username, userPassword, firstName, lastName);
     let userCollection = await users();
     let dupeuser = await userCollection.findOne({username: username});
     if (dupeuser !== null) throw "Duplicate username was found, please use a different one.";
@@ -156,7 +156,7 @@ export const signUpUser = async (
   };
 
 export const signInUser = async (username, userPassword) => {
-    let testval = helpers.checkSignInUser(username, userPassword);
+    let testval = await helpers.checkSignInUser(username, userPassword);
     let userCollection = await users();
     let user = await userCollection.findOne({username: username});
     if (!user) throw "Either the username or password is invalid";
