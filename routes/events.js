@@ -73,6 +73,7 @@ router.route('/:id').get(async (req, res) => {
         event.canApprove = req.session.user.permissions > 0;
         event.canEdit = event.organizerID == req.session.user.username;
         event.hasRSVPed = event.rsvpList.includes(req.session.user.username);
+        event.canRSVP = event.status > 1;
         event.hasStarted = event.startDate < (new Date());
         return res.render('eventmanage',event);
     } catch (e) {
@@ -172,5 +173,29 @@ router.route('/:id').get(async (req, res) => {
         return res.sendStatus(500);
       }
 });
+
+router.route('/:id/rsvp').patch(async (req, res) => {
+  const event = await getEventByID(req.params.id)
+  if (!event.rsvpList.includes(req.session.user.username)){
+    req.body.rsvpList = event.rsvpList.push(req.session.user.username);
+  } else {
+    req.body.rsvpList = event.rsvpList;
+  }
+  res.redirect(`/events/${newEvent._id}`)
+
+})
+
+router.route('/:id/unrsvp').patch(async (req, res) => {
+  const event = await getEventByID(req.params.id)
+  if (!event.rsvpList.includes(req.session.user.username)){
+    req.body.rsvpList = event.rsvpList;
+  } else {
+    req.body.rsvpList = event.rsvpList.filter(function(name) {
+      name !== req.session.user.username
+    });
+  }
+  res.redirect(`/events/${newEvent._id}`)
+
+})
 
 export default router;
