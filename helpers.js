@@ -204,7 +204,7 @@ export const checkCreateEvent = (
     return updateObject;
   }
   const checkPatchRecur = (startDate, endDate, recurUntil, isRecurring, originalEvent) =>{
-    if(isRecurring && recurUntil)
+    if(typeof isRecurring !== "undefined" && typeof recurUntil !== "undefined")
       {
         if(typeof isRecurring !== "boolean") throw "Recurring is not a vaild boolean for event";
         if(!recurUntil && isRecurring) throw "No recur until date given for recurring event";
@@ -213,14 +213,14 @@ export const checkCreateEvent = (
         if(isRecurring && (new Date(recurUntil) < new Date(startDate) || new Date(recurUntil) < new Date(endDate))) throw "Recurring date is before end date or start date";
         return recurUntil;
       }
-      else if(isRecurring)
+      else if(typeof isRecurring !== "undefined")
       {
         if(typeof isRecurring !== "boolean") throw "Recurring is not a vaild boolean for event";
         if(!originalEvent.recurUntil && isRecurring) throw "No recur until date given for recurring event";
         if(originalEvent.recurUntil && !isRecurring) throw "Recur until date given for nonrecurring event";
         return null;
       }
-      else if(recurUntil)
+      else if(typeof recurUntil !== "undefined")
       {
         if(!recurUntil && originalEvent.isRecurring) throw "No recur until date given for recurring event";
         if(recurUntil && !originalEvent.isRecurring) throw "Recur until date given for nonrecurring event";
@@ -228,6 +228,7 @@ export const checkCreateEvent = (
         if(originalEvent.isRecurring && (new Date(recurUntil) < new Date(startDate) || new Date(recurUntil) < new Date(endDate))) throw "Recurring date is before end date or start date";
         return recurUntil;
       }
+      return originalEvent.recurUntil;
   }
 
 export const checkCreateUser = async (
@@ -262,9 +263,7 @@ export const checkCreateUser = async (
         if (permissions !== 0 && permissions !== 1 && permissions !== 2) throw "Permissions is not a valid integer";
         if (typeof beingGranted !== "boolean") throw "Boolean not provided for being granted status";
         if (!Array.isArray(usersApproving)) throw "Given users approving list is not an array";
-        for (let i = 0; i < usersApproving.length; i++){
-            let testval = checkIsValidID(usersApproving[i], "Administrator Account ID");
-        }
+        let testval = checkArrayOfStrings(usersApproving);
         if (!Array.isArray(notifications)) throw "Given notifications is not an array";
         for (let i = 0; i < notifications.length; i++){
             let testval = checkString(notifications[i], "Notification");
