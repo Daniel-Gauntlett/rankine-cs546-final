@@ -119,7 +119,6 @@ export const getAllRooms = async () => {
     const roomCollection = await rooms();
     let roomList = await roomCollection
         .find({})
-        .project({_id: 1, name: 1})
         .toArray();
     if (!roomList) throw 'Could not get all rooms';
     for(let room of roomList)

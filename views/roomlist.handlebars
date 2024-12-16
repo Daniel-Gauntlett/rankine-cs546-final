@@ -5,7 +5,11 @@
     Room Features: {{roomFeatures}},
     Events: {{events}},
     Unavailable Times: {{unavailableTimes}},
-    Room Picture: {{roomPicture}}</p>
+    Room Picture:<img class="eventImage"
+                          alt="{{building}} {{roomNumber}} Poster"
+                          src="{{roomPicture}}"
+                          height="324"
+                          width="576"></p>
     <form action="/events/" method="POST" id="bookRoom">
 		<button type="submit" name="booking_button" id="booking_button">Book This Room!</button>
 	  </form>
