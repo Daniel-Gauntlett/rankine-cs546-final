@@ -1,5 +1,5 @@
 {{#each rooms}}
-    <p id="room">Building: {{building}}
+    <p class = "room">Building: {{building}}
     <br>
     Room #: {{roomNumber}}
     <br>
@@ -7,21 +7,29 @@
     <br>
     Room Features: {{roomFeatures}}
     <br>
-    Events: {{events}}
+    Events: <ol>
+      {{#each events}}
+         <li>{{this}}</li>
+      {{/each}}
+    </ol>
     <br>
-    Unavailable Times: {{unavailableTimes}}
+    Unavailable Times: <ul>
+    {{#each  unavailableTimes}}
+        <li>{{this}}</li>
+    {{/each}}
+    </ul>
     <br>
     Room Picture:<img class="eventImage"
                           alt="{{building}} {{roomNumber}} Image"
                           src="{{roomPicture}}"
                           ></p>
-    <form action="/events/" method="POST" id="bookRoom">
-		<button type="submit" name="booking_button" id="booking_button">Book This Room!</button>
+    <form action="/events/" method="POST" class="bookRoom">
+		<button type="submit" name="booking_button" class="booking_button">Book This Room!</button>
 	  </form>
     <!--- Only show this if user is admin, maybe inject with Ajax? Should link to roommanage page for specific room ID-->
     <div class="showEditButton">
-    <form action="/rooms/" method="POST" id="editRoom">
-    <button type="submit" name="editRoomButton" id="editRoomButton">Manage This Room</button>
+    <form action="/rooms/" method="POST" class="editRoom">
+    <button type="submit" name="editRoomButton" class="editRoomButton">Manage This Room</button>
     </form>
     </div>
 {{/each}}
