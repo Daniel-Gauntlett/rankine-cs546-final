@@ -24,6 +24,7 @@
         } else {
             patch.status = 0;
         }
+        console.log(typeof(patch.status));
         let requestConfig = {
             method: 'PATCH',
             url: '/events/' + eventInfo.attr("class"),

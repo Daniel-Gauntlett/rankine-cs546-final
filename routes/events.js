@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { createEvent, getAllEvents, getEventByID, removeEvent, updateEvent } from '../data/events.js';
+import { createEvent, getAllEvents, getEventByID, patchEvent, removeEvent, updateEvent } from '../data/events.js';
 import * as helpers from '../helpers.js';
 const router = Router();
 
@@ -87,7 +87,7 @@ router.route('/:id').get(async (req, res) => {
         return res.status(400).json({error: e});
       }
       const event = await getEventByID(req.params.id);
-      if(!(event.isPrivate) || event.organizerID == req.session.user.username || req.session.user.permissions > 0) {
+      if(event.organizerID != req.session.user.username && req.session.user.permissions === 0) {
         return res.status(403).json({error: "Unauthorized deletion"})
       }
       try {
@@ -123,7 +123,7 @@ router.route('/:id').get(async (req, res) => {
     }
     try {
         const event = await getEventByID(req.params.id);
-        if(!(event.isPrivate) || event.organizerID == req.session.user.username || req.session.user.permissions > 0) {
+        if(event.organizerID != req.session.user.username && req.session.user.permissions === 0) {
           return res.status(403).json({error: "Unauthorized edit"})
         }
         const updatedEvent = await updateEvent(
@@ -155,16 +155,16 @@ router.route('/:id').get(async (req, res) => {
         .json({error: 'There are no fields in the request body'});
     }
     try {
-      await helpers.checkPatchUser(req.params.id, (await getUserById(req.params.id)), req.body)
+      helpers.checkPatchEvent(req.params.id, (await getUserById(req.params.id)), req.body)
     } catch (e) {
       return res.status(400).json({error: e});
     }
     try {
         const event = await getEventByID(req.params.id);
-        if(!(event.isPrivate) || event.organizerID == req.session.user.username || req.session.user.permissions > 0) {
+        if(event.organizerID != req.session.user.username && req.session.user.permissions === 0) {
           return res.status(403).json({error: "Unauthorized edit"})
         }
-        const patchedEvent = await patchUser(
+        const patchedEvent = await patchEvent(
             req.params.id, req.body
         );
         res.redirect("/events/" + req.params.id)
