@@ -1,9 +1,22 @@
-<h1>Rankine</h1>
-<p>
+<h1 class="fade-in">Rankine</h1>
+<h3>
     Hello {{username}}, welcome to Rankine!
     Our website helps you find and create campus events.
-</p>
+</h3>
 
+{{#if isLoggedIn}}
+    <p>Current Notifications: </p>
+    {{#each notifications}}
+        <p id="notification">
+            {{notiftext}}
+        </p>
+    {{/each}}
+    <form action="/users/" method="POST" id="notifications-form">
+    <label for = "submit_button">
+        <button name="submit_button" id="submit_button" type="submit">Clear Notifications</button>
+    </label>
+    </form>
+{{/if}}
 {{!-- <form action="/" method="POST" class="new-event-search">
     <label for = "searchByEvents">
         Search By Events
