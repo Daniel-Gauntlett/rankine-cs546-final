@@ -29,31 +29,31 @@ router.route('/').get(async (req, res) => {
         eventData.recurUntil,
         eventData.isPrivate,
         eventData.roomID,
-        eventData.status,
-        eventData.organizerID,
-        eventData.rsvpList,
-        eventData.attendeesList,
-        eventData.picture)
+        1,
+        req.user.username,
+        [],
+        [],
+        "")
     } catch (e) {
       return res.status(400).json({error: e});
     }
     try {
         const newEvent = await createEvent(
-            eventData.name,
-            eventData.description,
-            eventData.startDate,
-            eventData.endDate,
-            eventData.isRecurring,
-            eventData.recurUntil,
-            eventData.isPrivate,
-            eventData.roomID,
-            eventData.status,
-            eventData.organizerID,
-            eventData.rsvpList,
-            eventData.attendeesList,
-            eventData.picture
+          eventData.name,
+          eventData.description,
+          eventData.startDate,
+          eventData.endDate,
+          eventData.isRecurring,
+          eventData.recurUntil,
+          eventData.isPrivate,
+          eventData.roomID,
+          1,
+          req.user.username,
+          [],
+          [],
+          ""
         );
-        return res.json(newEvent);
+        res.redirect(`/events/${newEvent._id}`);
       } catch (e) {
         console.log(e);
         return res.status(500).json({error: e});

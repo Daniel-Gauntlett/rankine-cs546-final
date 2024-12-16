@@ -60,6 +60,9 @@ let checkCreateUser = (
 let signinform = document.getElementById('signin-form');
 let signupform = document.getElementById('signup-form');
 let errorDiv = document.getElementById('error');
+let eventList = document.getElementById('event-list');
+let makeEventButton = document.getElementById('make_event_button');
+let makeEventForm = document.getElementById('make_event_form')
 if(signinform){
     signinform.addEventListener('submit', (event) => {
     try {
@@ -84,5 +87,20 @@ if(signupform){
             errorDiv.hidden = false;
             errorDiv.innerHTML = e;
         }
+    });
+}
+
+if(makeEventButton){
+    signupform.addEventListener('submit', (event) => {
+        event.preventDefault();
+        eventList.hidden = true;
+        makeEventButton.hidden = true;
+        makeEventForm.hidden = false;
+    });
+}
+
+if(makeEventForm){
+    signupform.addEventListener('submit', (event) => {
+        //this is for room reservation
     });
 }
