@@ -70,6 +70,10 @@ router.route('/:id').get(async (req, res) => {
     try {
         const event = await getEventByID(req.params.id);
         event.canSee = !(event.isPrivate) || event.organizerID == req.session.user.username || req.session.user.permissions > 0;
+        event.canApprove = req.session.user.permissions > 0;
+        event.canEdit = event.organizerID == req.session.user.username;
+        event.hasRSVPed = event.rsvpList.includes(req.session.user.username);
+        event.hasStarted = event.startDate < (new Date());
         return res.render('eventmanage',event);
     } catch (e) {
         return res.status(404).json(e);

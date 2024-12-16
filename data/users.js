@@ -178,7 +178,8 @@ export const signInUser = async (username, userPassword) => {
         firstName: user.firstName,
         lastName: user.lastName,
         permissions: user.permissions,
-        notifications: user.notifications
+        notifications: user.notifications,
+        isBooking: false,
       }
       return userFields;
     }
