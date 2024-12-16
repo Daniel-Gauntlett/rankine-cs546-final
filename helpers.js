@@ -339,7 +339,7 @@ export const checkSignInUser = (username, userPassword) => {
     if (!username) throw "No username given";
     if (!userPassword) throw "No password given";
     username = checkString(username, "Given first name");
-    if (username.length < 5 || firstName.length > 10) throw "Given username is incorrect length, must be between 5-10 characters.";
+    if (username.length < 5 || username.length > 10) throw "Given username is incorrect length, must be between 5-10 characters.";
     userPassword = checkIsValidPassword(userPassword, 8);
     return true;
 }
