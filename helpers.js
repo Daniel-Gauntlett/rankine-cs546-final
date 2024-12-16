@@ -1,5 +1,4 @@
 import {ObjectId} from 'mongodb';
-import bcrypt from 'bcrypt';
 export const checkString = (data, name) =>
 {
     if(!data) throw  `${name} isn't a valid non-empty string`;
@@ -75,7 +74,7 @@ export const checkIsValidIDs = (data, name) =>
     }
     return data;
 }
-export const  checkIsValidPassword = async (password, saltRounds) =>
+export const  checkIsValidPassword = (password, saltRounds) =>
 {
   password = checkString(password, "Given password");
   let passtest1 = false;
@@ -94,8 +93,7 @@ export const  checkIsValidPassword = async (password, saltRounds) =>
   else{
     throw "Given password is invalid, must include an uppercase character, a special character, and a number.";
   }
-  let hash = await bcrypt.hash(password, saltRounds);
-  return hash;
+  return password;
 }
 
 export const checkCreateEvent = (
@@ -238,7 +236,7 @@ export const checkCreateEvent = (
       return originalEvent.recurUntil;
   }
 
-export const checkCreateUser = async (
+export const checkCreateUser =  (
     username,
     userPassword,
     firstName,
@@ -262,7 +260,7 @@ export const checkCreateUser = async (
         if (!notifications) throw "No notifications array provided for the user";
         username = checkString(username, "Username");
         if (username.length < 5 || username.length > 10) throw "Given username is incorrect length";
-        userPassword = await checkIsValidPassword(userPassword, 8);
+        userPassword = checkIsValidPassword(userPassword, 8);
         firstName = checkString(firstName, "First Name");
         if (firstName.length < 2 || firstName.length > 25) throw "Given first name is incorrect length";
         lastName = checkString(lastName, "Last Name");
@@ -287,7 +285,7 @@ export const checkCreateUser = async (
         }
         return returnobj;
 }
-export const checkPatchUser = async (
+export const checkPatchUser =  (
     id,
     originalUser,
     updateObject
@@ -298,7 +296,7 @@ export const checkPatchUser = async (
     id = checkIsValidID(id, "User ID");
     if ('username' in updateObject) updateObject.username = checkString(updateObject.username);
     if ('username' in updateObject && (updateObject.username.length < 5 || updateObject.username.length > 10)) throw "Given username is incorrect length, must be between 5-10 characters.";
-    if ('userPassword' in updateObject) updateObject.userPassword = await checkIsValidPassword(userPassword, 8);
+    if ('userPassword' in updateObject) updateObject.userPassword = checkIsValidPassword(userPassword, 8);
     if ('userPassword' in updateObject && originalUser.userPassword === updateObject.userPassword) throw "Given updated password needs to be different";
     if ('firstName' in updateObject) updateObject.firstName = checkString(updateObject.firstName);
     if ('firstName' in updateObject && (updateObject.firstName.length < 2 || updateObject.firstName.length > 25)) throw "Given first name is incorrect length";
@@ -321,7 +319,7 @@ export const checkPatchUser = async (
     return updateObject;
   }
 
-export const checkSignUpUser = async (
+export const checkSignUpUser =  (
   username,
   userPassword,
   firstName,
@@ -333,7 +331,7 @@ export const checkSignUpUser = async (
     if (!lastName) throw "No last name given";
     username = checkString(username, "Given first name");
     if (username.length < 5 || firstName.length > 10) throw "Given username is incorrect length, must be between 5-10 characters.";
-    userPassword = await checkIsValidPassword(userPassword, 8);
+    userPassword = checkIsValidPassword(userPassword, 8);
     firstName = checkString(firstName, "Given first name");
     if (firstName.length < 2 || firstName.length > 25) throw "Given first name is incorrect length";
     lastName = checkString(lastName, "Given last name");
@@ -341,7 +339,7 @@ export const checkSignUpUser = async (
     return true;
 }
 
-export const checkSignInUser = async (username, userPassword) => {
+export const checkSignInUser =  (username, userPassword) => {
     if (!username) throw "No username given";
     if (!userPassword) throw "No password given";
     username = checkString(username, "Given first name");
@@ -350,7 +348,7 @@ export const checkSignInUser = async (username, userPassword) => {
     return true;
 }
 
-export const checkCreateRoom = async (
+export const checkCreateRoom = (
     building,
     roomNumber,
     roomCapacity,
@@ -382,7 +380,7 @@ export const checkCreateRoom = async (
     return {building, roomNumber, roomCapacity, roomFeatures, unavailableTimes, roomPicture}
 }
 
-export const checkUpdateRoom = async (
+export const checkUpdateRoom = (
     roomID,
     building,
     roomNumber,
@@ -394,7 +392,7 @@ export const checkUpdateRoom = async (
     if(!roomID) throw "No id given for event";
     id = checkIsValidID(id, "event ID");
     try {
-        return await checkCreateRoom(building, roomNumber,
+        return checkCreateRoom(building, roomNumber,
             roomCapacity,
             roomFeatures,
             unavailableTimes,
