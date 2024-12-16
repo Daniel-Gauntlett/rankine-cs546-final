@@ -142,6 +142,7 @@ export const signUpUser = async (
     firstName,
     lastName,
   ) => {
+    if (username) username = username.toLowerCase();
     let testval = await helpers.checkSignUpUser(username, userPassword, firstName, lastName);
     let userCollection = await users();
     let dupeuser = await userCollection.findOne({username: username});
@@ -165,6 +166,7 @@ export const signUpUser = async (
   };
 
 export const signInUser = async (username, userPassword) => {
+    username = username.toLowerCase();
     let testval = await helpers.checkSignInUser(username, userPassword);
     let userCollection = await users();
     let user = await userCollection.findOne({username: username});

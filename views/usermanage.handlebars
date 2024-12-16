@@ -1,11 +1,17 @@
-<form action="/users/" method="PATCH" id="permissions-form">
+<form action="/users/" method="POST" id="permissions-form">
     <p id="userInfo" currentuser = "{{currentuser}}" thisuser = "{{username}}">
-        Username:{{username}},
-        First Name: {{firstName}},
-        Last Name: {{lastName}},
-        Permissions: {{permissions}},
-        Being Granted: {{beingGranted}},
+        Username:{{username}}
+        <br>
+        First Name: {{firstName}}
+        <br>
+        Last Name: {{lastName}}
+        <br>
+        Permissions: {{permissions}}
+        <br>
+        Being Granted: {{beingGranted}}
+        <br>
         Approving Users: {{usersApproving}}
+        <br>
     </p>
     <label for = "permissions">
         Change Permissions to: 
