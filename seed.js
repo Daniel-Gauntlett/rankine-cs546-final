@@ -14,6 +14,7 @@ let user2 = null;
 let user3 = null;
 let user4 = null;
 let user5 = null;
+let user6 = null;
 let room1 = null;
 let room2 = null;
 let room3 = null;
@@ -28,6 +29,7 @@ try{
     user4 = await users.createUser("dbarrand", "Learner#2", "Drayton", "Barrand", 0, true, [user3.username], ["Pending"]);
     console.dir(user4, {depth: null});
     user5 = await users.createUser("jbrown", "Teacher#2", "Jeremy", "Brown", 1, false, [], [`Please look over this request made by ${user4.firstName}`]);
+    user6 = await users.createUser("adanta", "Principal#2", "Advait", "Dantaluri", 2, false, [], []);
 }catch(e)
 {
     console.error(e);
