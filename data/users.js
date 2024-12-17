@@ -208,7 +208,13 @@ export const permissionsCheck = async (adminId, userId, usersApproving, permissi
             permissions: permissions,
             usersApproving: []
         };
-        test = patchUser(userId, obj);
+        test = await patchUser(userId, obj);
+    }
+    else {
+        let obj = {
+            usersApproving: usersApproving
+        }
+        test = await patchUser(userId, obj);
     }
     return test;
 }
