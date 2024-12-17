@@ -8,11 +8,11 @@ Status: {{status}}</p>
 {{#if canRSVP}}
 {{#if hasRSVPed}}
 <p>You've RSVPed for this event!</p>
-<form action="/events/event/{{_id}}/unrsvp" method="PATCH" id="unrsvp_form">
+<form action="/events/event/{{_id}}" method="GET" id="unrsvp_form">
     <button type="submit" name="rsvp_button" id="unrsvp_button">UnRSVP for this event</button>
 </form>
 {{else}}
-<form action="/events/event/{{_id}}/rsvp" method="PATCH" id="rsvp_form">
+<form action="/events/event/{{_id}}" method="GET" id="rsvp_form">
     <button type="submit" name="rsvp_button" id="rsvp_button">RSVP for this event</button>
 </form>
 {{/if}}

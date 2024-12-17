@@ -200,7 +200,7 @@ router.route('/event/:id/rsvp').patch(async (req, res) => {
   } else {
     req.body.rsvpList = event.rsvpList;
   }
-  return res.json({redirect: `/events/event/${newEvent._id}`});
+  return res.json({redirect: `/events/event/${req.params.id}`});
 
 })
 
@@ -215,7 +215,7 @@ router.route('/event/:id/unrsvp').patch(async (req, res) => {
       name !== req.session.user.username
     });
   }
-  return res.json({redirect: `/events/event/${newEvent._id}`});
+  return res.json({redirect: `/events/event/${req.params.id}`});
 
 })
 

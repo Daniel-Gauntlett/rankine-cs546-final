@@ -95,7 +95,7 @@
     });
 
     rsvp.submit(function (event) {
-        event.preventDefault();
+        //event.preventDefault();
         let newinfo = {};
         newinfo.user = eventInfo.attr("currentuser");
         let requestConfig = {
@@ -112,7 +112,7 @@
     });
 
     unrsvp.submit(function (event) {
-        event.preventDefault();
+        //event.preventDefault();
         let newinfo = {};
         newinfo.user = eventInfo.attr("currentuser");
         let requestConfig = {
