@@ -310,7 +310,13 @@ export const checkPatchUser =  (
     if ('firstName' in updateObject && (updateObject.firstName.length < 2 || updateObject.firstName.length > 25)) throw "Given first name is incorrect length";
     if ('lastName' in updateObject) updateObject.lastName = checkString(updateObject.lastName);
     if ('lastName' in updateObject && (updateObject.lastName.length < 2 || updateObject.lastName.length > 25)) throw "Given last name is incorrect length";
-    if ('permissions' in updateObject && (permissions !== 0 && permissions !== 1 && permissions !== 2)) throw "Permissions is not a valid integer";
+    if ('permissions' in updateObject)
+      {
+        if(updateObject.permissions !== 0 && updateObject.permissions !== 1 && updateObject.permissions !== 2)
+        {
+          throw "Permissions is not a valid integer";
+        }
+      } 
     if ('beingGranted' in updateObject && (typeof updateObject.beingGranted !== "boolean")) throw "Given being granted status is not a boolean";
     if ('usersApproving' in updateObject){
       if (!Array.isArray(updateObject.usersApproving)) throw "Given users approving list is not an array";
