@@ -72,13 +72,16 @@ router.route('/:id').get(async (req, res) => {
         return res.status(400).json({error: e});
     }
     try {
-        const event = await getEventByID(req.params.id);
+        let event = await getEventByID(req.params.id);
         event.canSee = !(event.isPrivate) || event.organizerID == req.session.user.username || req.session.user.permissions > 0;
         event.canApprove = req.session.user.permissions > 0 && event.status == 1;
         event.canEdit = event.organizerID == req.session.user.username;
         event.hasRSVPed = event.rsvpList.includes(req.session.user.username);
         event.canRSVP = event.status > 1;
         event.hasStarted = event.startDate < (new Date());
+        if(event.status === 0) event.status = "Rejected";
+        else if(event.status === 1) event.status = "Pending";
+        else if (event.status ===2) event.status = "Approved";
         return res.render('eventmanage',event);
     } catch (e) {
         return res.status(404).json(e);
