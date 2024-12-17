@@ -11,6 +11,9 @@
         <a href="/">Home Page</a>
         <a href="/events/">Event List</a>
         <a href="/rooms/">Room List</a>
+        {{#if isAdmin}}
+           <a href="/users/">User List</a>
+        {{/if}}
     </header>
     <main>
         {{{body}}}
