@@ -57,14 +57,14 @@ router.route('/').get(async (req, res) => {
           [],
           ""
         );
-        res.redirect(`/events/event/${newEvent._id}`);
+        return res.json({redirect: `/events/event/${newEvent._id}`});
       } catch (e) {
         console.log(e);
         return res.status(500).json({error: e});
       }
 });
 router.route('/create/:roomid').get(async (req,res) => {
-  res.render('eventcreate',{room: req.params.roomid})
+  res.render('eventcreate',{room: req.params.roomid});
 })
 router.route('/event/:id').get(async (req, res) => {
     try {
@@ -83,10 +83,10 @@ router.route('/event/:id').get(async (req, res) => {
         event.hasRSVPed = event.rsvpList.includes(req.session.user.username);
         event.canRSVP = event.status > 1;
         event.hasStarted = event.startDate < (new Date());
-        event.currentuser = req.session.user.username;
         if(event.status === 0) event.status = "Rejected";
         else if(event.status === 1) event.status = "Pending";
         else if (event.status ===2) event.status = "Approved";
+        event.currentuser = req.session.user.username;
         return res.render('eventmanage',event);
     } catch (e) {
         return res.status(404).json(e);
@@ -187,7 +187,7 @@ router.route('/event/:id').get(async (req, res) => {
         const patchedEvent = await patchEvent(
             req.params.id, req.body
         );
-        res.redirect("/events/event/" + req.params.id)
+        return res.json({redirect: "/events/event/" + req.params.id});
       } catch (e) {
         console.log(e);
         return res.sendStatus(500);
@@ -203,7 +203,7 @@ router.route('/event/:id/rsvp').patch(async (req, res) => {
   } else {
     req.body.rsvpList = event.rsvpList;
   }
-  res.redirect(`/events/event/${newEvent._id}`)
+  return res.json({redirect: `/events/event/${req.params.id}`});
 
 })
 
@@ -218,7 +218,7 @@ router.route('/event/:id/unrsvp').patch(async (req, res) => {
       name !== req.session.user.username
     });
   }
-  res.redirect(`/events/event/${newEvent._id}`)
+  return res.json({redirect: `/events/event/${req.params.id}`});
 
 })
 

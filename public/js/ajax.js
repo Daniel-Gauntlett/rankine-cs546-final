@@ -25,7 +25,8 @@
         let requestConfig = {
             method: 'POST',
             url: '/events/',
-            data: JSON.stringify(patch)
+            data: JSON.stringify(patch),
+            dataType: "json"
         };
         $.ajax(requestConfig).then(function (responseMessage) {
             if (responseMessage.redirect) {
@@ -51,7 +52,8 @@
         let requestConfig = {
             method: 'PATCH',
             url: '/events/event/' + eventInfo.attr("eventid"),
-            data: JSON.stringify(patch)
+            data: JSON.stringify(patch),
+            dataType: "json"
         };
         $.ajax(requestConfig).then(function (responseMessage) {
             if (responseMessage.redirect) {
@@ -61,7 +63,8 @@
         requestConfig = {
             method: 'POST',
             url: '/users/notification/' + eventInfo.attr("organizer"),
-            data: notif
+            data: notif,
+            dataType: "json"
         };
         $.ajax(requestConfig).then(function (responseMessage) {
             if (responseMessage.redirect) {
@@ -81,7 +84,8 @@
         let requestConfig = {
             method: 'PATCH',
             url: '/events/event/' + eventInfo.attr("eventid"),
-            data: JSON.stringify(patch)
+            data: JSON.stringify(patch),
+            dataType: "json"
         };
         $.ajax(requestConfig).then(function (responseMessage) {
             if (responseMessage.redirect) {
@@ -91,13 +95,14 @@
     });
 
     rsvp.submit(function (event) {
-        event.preventDefault();
+        //event.preventDefault();
         let newinfo = {};
         newinfo.user = eventInfo.attr("currentuser");
         let requestConfig = {
             method: 'PATCH',
             url: '/events/event/' + eventInfo.attr("eventid") + "/rsvp",
-            data: JSON.stringify(newinfo)
+            data: JSON.stringify(newinfo),
+            dataType: "json"
         };
         $.ajax(requestConfig).then(function (responseMessage) {
             if (responseMessage.redirect) {
@@ -107,13 +112,14 @@
     });
 
     unrsvp.submit(function (event) {
-        event.preventDefault();
+        //event.preventDefault();
         let newinfo = {};
         newinfo.user = eventInfo.attr("currentuser");
         let requestConfig = {
             method: 'PATCH',
             url: '/events/event/' + eventInfo.attr("eventid") + "/unrsvp",
-            data: JSON.stringify(newinfo)
+            data: JSON.stringify(newinfo),
+            dataType: "json"
         };
         $.ajax(requestConfig).then(function (responseMessage) {
             if (responseMessage.redirect) {
@@ -135,7 +141,8 @@
             let requestConfig = {
                 method: 'PATCH',
                 url: '/users/' + eventInfo.attr("thisuser"),
-                data: JSON.stringify(data)
+                data: JSON.stringify(data),
+                dataType: "json"
             };
             $.ajax(requestConfig).then(function (responseMessage) {
                 if (responseMessage.redirect) {
@@ -161,18 +168,19 @@
         })
     }*/
 
-    bookroom.submit(function (event) {
-        event.preventDefault();
+    /*bookroom.submit(function (event) {
         let requestConfig = {
             method: 'GET',
-            url: ('/events/create/' + bookroom.attr("roomid"))
+            url: ('/events/create/' + bookroom.attr("roomid")),
+            dataType: "json"
         };
+        console.log("i'm routing")
         $.ajax(requestConfig).then(function (responseMessage) {
             console.log(responseMessage);
             if (responseMessage.redirect) {
                 window.location.href = responseMessage.redirect;
             }
         });
-    })
+    })*/
 
 })(window.jQuery);
