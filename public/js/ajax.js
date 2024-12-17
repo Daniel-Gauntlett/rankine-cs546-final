@@ -1,7 +1,5 @@
 (function ($) {
-    let makeEventButton = $('#confirm_make_event');
     let makeEventForm = $('#make_event_form');
-    let eventList = $('#event-list');
     let recurringCheckbox = $('#isRecurringCheckbox');
     let recurringDateBox = $('#recurDateBox');
     let approvalForm = $('#approve_form');
@@ -11,11 +9,24 @@
     let rsvp = $("rsvp_form");
     let unrsvp = $("unrsvp_form");
     let permissions = $("permissions-form");
-    makeEventButton.submit(function (event) {
+    makeEventForm.submit(function (event) {
         event.preventDefault();
-        makeEventButton.hide();
-        eventList.hide();
-        makeEventForm.show();
+        let patch = {};
+        patch.status = 1;
+        patch.name = makeEventForm.find("input[name='name']").val();
+        patch.description = makeEventForm.find("input[name='description']").val();
+        patch.startDate = makeEventForm.find("input[name='startDate']").val();
+        patch.endDate = makeEventForm.find("input[name='endDate']").val();
+        patch.roomID = makeEventForm.attr("room");
+        patch.roomPicture = makeEventForm.find("input[name='pictureURL']").val();
+        patch.isRecurring = makeEventForm.find("input[name='isRecurring']").prop("checked");
+        patch.recurUntil = patch.isRecurring ? makeEventForm.find("input[name='recurUntil']").val() : null;
+        let requestConfig = {
+            method: 'POST',
+            url: '/events/',
+            data: JSON.stringify(patch)
+        };
+        $.ajax(requestConfig);
     })
     recurringCheckbox.click(function (event) {
         recurringDateBox.toggle();
@@ -34,7 +45,7 @@
 
         let requestConfig = {
             method: 'PATCH',
-            url: '/events/' + eventInfo.attr("eventid"),
+            url: '/events/event/' + eventInfo.attr("eventid"),
             data: JSON.stringify(patch)
         };
         $.ajax(requestConfig);
@@ -56,7 +67,7 @@
         patch.endDate = patchEventForm.find("input[name='endDate']").val();
         let requestConfig = {
             method: 'PATCH',
-            url: '/events/' + eventInfo.attr("eventid"),
+            url: '/events/event/' + eventInfo.attr("eventid"),
             data: JSON.stringify(patch)
         };
         $.ajax(requestConfig);
@@ -68,7 +79,7 @@
         newinfo.user = eventInfo.attr("currentuser");
         let requestConfig = {
             method: 'PATCH',
-            url: '/events/' + eventInfo.attr("eventid") + "/rsvp",
+            url: '/events/event/' + eventInfo.attr("eventid") + "/rsvp",
             data: JSON.stringify(newinfo)
         };
         $.ajax(requestConfig);
@@ -80,7 +91,7 @@
         newinfo.user = eventInfo.attr("currentuser");
         let requestConfig = {
             method: 'PATCH',
-            url: '/events/' + eventInfo.attr("eventid") + "/unrsvp",
+            url: '/events/event/' + eventInfo.attr("eventid") + "/unrsvp",
             data: JSON.stringify(newinfo)
         };
         $.ajax(requestConfig);

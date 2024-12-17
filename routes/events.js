@@ -10,8 +10,6 @@ router.route('/').get(async (req, res) => {
     for(let x = 0; x < eventslist.length; x++){
       eventslist[x].canSee = !(eventslist[x].isPrivate) || eventslist[x].organizerID == req.session.user.username || req.session.user.permissions > 0;
     }
-    req.session.user.isBooking = false;
-    req.session.user.currentBooking = {};
     return res.render('./eventlist', {title: "Events List", events: eventslist})
   } catch (e) {
     return res.status(500).send(e);
@@ -35,7 +33,7 @@ router.route('/').get(async (req, res) => {
         eventData.isPrivate,
         eventData.roomID,
         1,
-        req.user.username,
+        req.session.user.username,
         [],
         [],
         "")
@@ -59,14 +57,16 @@ router.route('/').get(async (req, res) => {
           [],
           ""
         );
-        res.redirect(`/events/${newEvent._id}`);
+        res.redirect(`/events/event/${newEvent._id}`);
       } catch (e) {
         console.log(e);
         return res.status(500).json({error: e});
       }
 });
-
-router.route('/:id').get(async (req, res) => {
+router.route('/create/:roomid').get(async (req,res) => {
+  res.render('/eventcreate',{room: req.params.roomid})
+})
+router.route('/event/:id').get(async (req, res) => {
     try {
         req.params.id = xss(req.params.id);
         helpers.checkString(req.params.id, "ID");
@@ -84,8 +84,6 @@ router.route('/:id').get(async (req, res) => {
         event.canRSVP = event.status > 1;
         event.hasStarted = event.startDate < (new Date());
         event.currentuser = req.session.user.username;
-        req.session.user.isBooking = false;
-        req.session.user.currentBooking = {};
         return res.render('eventmanage',event);
     } catch (e) {
         return res.status(404).json(e);
@@ -186,14 +184,14 @@ router.route('/:id').get(async (req, res) => {
         const patchedEvent = await patchEvent(
             req.params.id, req.body
         );
-        res.redirect("/events/" + req.params.id)
+        res.redirect("/events/event/" + req.params.id)
       } catch (e) {
         console.log(e);
         return res.sendStatus(500);
       }
 });
 
-router.route('/:id/rsvp').patch(async (req, res) => {
+router.route('/event/:id/rsvp').patch(async (req, res) => {
   Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
   req.params.id = xss(req.params.id);
   const event = await getEventByID(req.params.id)
@@ -202,11 +200,11 @@ router.route('/:id/rsvp').patch(async (req, res) => {
   } else {
     req.body.rsvpList = event.rsvpList;
   }
-  res.redirect(`/events/${newEvent._id}`)
+  res.redirect(`/events/event/${newEvent._id}`)
 
 })
 
-router.route('/:id/unrsvp').patch(async (req, res) => {
+router.route('/event/:id/unrsvp').patch(async (req, res) => {
   Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
   req.params.id = xss(req.params.id);
   const event = await getEventByID(req.params.id)
@@ -217,7 +215,7 @@ router.route('/:id/unrsvp').patch(async (req, res) => {
       name !== req.session.user.username
     });
   }
-  res.redirect(`/events/${newEvent._id}`)
+  res.redirect(`/events/event/${newEvent._id}`)
 
 })
 

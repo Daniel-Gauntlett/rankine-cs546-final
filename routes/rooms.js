@@ -89,12 +89,17 @@ router.route('/:id').get(async (req, res) => {
       .json({error: 'There are no fields in the request body'});
   }
   try {
-    await helpers.checkCreateRoom() //i need dray
+    await helpers.checkCreateRoom(roomData.building,
+      roomData.roomNumber,
+      roomData.roomCapacity,
+      roomData.roomFeatures,
+      roomData.unavailableTimes,
+      roomData.roomPicture)
   } catch (e) {
     return res.status(400).json({error: e});
   }
   try {
-      const newUser = await updateUser(
+      const newUser = await updateRoom(
           roomData.roomID,
           roomData.building,
           roomData.roomNumber,
