@@ -1,4 +1,4 @@
-<form action="/rooms/" method="POST" id="create-room-form">
+<form action="/rooms/roomCreate" method="POST" id="create-room-form">
     <label for = "building">
         Building
         <input type="text" id="building" name = "building">
@@ -13,6 +13,10 @@
         Max Capacity:
         <input type="number" id="roomCapacity" name = "roomCapacity" >
     </label>
+    <label for="roomFeatures">
+        Features
+        <input type="text" id="roomFeatures" name="roomFeatures" placeholder="Enter features, separated by commas">
+    </label>
     <br>
     <!-- AJAX calls: 
     When checkbox is checked, set endRecurring to visible
@@ -22,12 +26,12 @@
     <div class="unavailable-instance">
       <label>
         Start Date:
-        <input type="datetime-local" name="startDate">
+        <input type="datetime-local" name="startDate" id="startDate">
       </label>
       <br>
       <label>
         End Date:
-        <input type="datetime-local" name="endDate">
+        <input type="datetime-local" name="endDate" id="endDate">
       </label>
       <br>
       <label>
@@ -37,11 +41,11 @@
       <br>
       <label class="endRecurring" hidden>
         End Recurring:
-        <input type="datetime-local" name="endRecurring">
+        <input type="datetime-local" name="endRecurring" id="endRecurring">
       </label>
       <br>
-      <button type="button" id="addInstance">Add Another Time</button>
-      <button type="button" id="deleteInstance" hidden>Delete</button>
+      <button type="button" class="addInstance">Add Another Time</button>
+      <button type="button" class="deleteInstance" hidden>Delete</button>
     </div>
   </div>
   <button name="roomCreateButton" id="roomCreateButton" type="submit">Submit</button>
