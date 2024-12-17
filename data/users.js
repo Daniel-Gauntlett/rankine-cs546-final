@@ -200,13 +200,20 @@ export const permissionsCheck = async (adminId, userId, usersApproving, permissi
     adminId = helpers.checkIsValidID(adminId, "Admin ID");
     userId = helpers.checkIsValidID(userId, "User ID");
     usersApproving.push(adminId);
+    let test = null;
     if (usersApproving.length >= 2){
         permissions++;
         let obj = {
             permissions: permissions,
             usersApproving: []
         };
-        let test = patchUser(userId, obj);
+        test = await patchUser(userId, obj);
+    }
+    else {
+        let obj = {
+            usersApproving: usersApproving
+        }
+        test = await patchUser(userId, obj);
     }
     return test;
 }
