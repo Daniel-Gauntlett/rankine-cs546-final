@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import { createEvent, getAllEvents, getEventByID, patchEvent, removeEvent, updateEvent } from '../data/events.js';
 import * as helpers from '../helpers.js';
+import * as rooms from '../data/rooms.js';
 import xss from 'xss';
 const router = Router();
 
@@ -10,12 +11,67 @@ router.route('/').get(async (req, res) => {
     for(let x = 0; x < eventslist.length; x++){
       eventslist[x].canSee = !(eventslist[x].isPrivate) || eventslist[x].organizerID == req.session.user.username || req.session.user.permissions > 0;
     }
-    return res.render('./eventlist', {title: "Events List", events: eventslist})
+    let r = await rooms.getAllRooms();
+    return res.render('./eventlist', {title: "Events List", events: eventslist, r:r})
   } catch (e) {
     return res.status(500).send(e);
   }
 }).post(async (req, res) => {
     //https://stackoverflow.com/questions/66139376/how-to-apply-math-or-a-function-to-every-element-in-a-javascript-object
+    Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
+    let eventData = req.body;
+    if (!eventData || Object.keys(eventData).length === 0) {
+      return res
+        .status(400)
+        .json({error: 'There are no fields in the request body'});
+    }
+    try {
+      if(eventData.recurUntil == "") eventData.recurUntil = null;
+      if(!('isPrivate' in eventData)) eventData.isPrivate = false;
+      if(!('isRecurring' in eventData)) eventData.isRecurring = false;
+      await helpers.checkCreateEvent(eventData.name,
+        eventData.description,
+        eventData.startDate,
+        eventData.endDate,
+        eventData.isRecurring,
+        eventData.recurUntil,
+        eventData.isPrivate,
+        eventData.roomID,
+        1,
+        req.session.user.username,
+        [],
+        [],
+        eventData.pictureURL)
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({error: e});
+    }
+    try {
+        const newEvent = await createEvent(
+          eventData.name,
+          eventData.description,
+          eventData.startDate,
+          eventData.endDate,
+          eventData.isRecurring,
+          eventData.recurUntil,
+          eventData.isPrivate,
+          eventData.roomID,
+          1,
+          req.session.user.username,
+          [],
+          [],
+          eventData.pictureURL
+        );
+        let events = await getAllEvents();
+        return res.render('./eventlist', {events: events})
+      } catch (e) {
+        console.log(e);
+        return res.status(500).json({error: e});
+      }
+});
+router.route('/create/:roomid').get(async (req,res) => {
+  res.render('eventcreate',{room: req.params.roomid});
+}).post(async (req, res) =>{
     Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
     let eventData = req.body;
     if (!eventData || Object.keys(eventData).length === 0) {
@@ -57,14 +113,11 @@ router.route('/').get(async (req, res) => {
           [],
           ""
         );
-        return res.json({redirect: `/events/event/${newEvent._id}`});
+        return res.redirect('/events/');
       } catch (e) {
         console.log(e);
         return res.status(500).json({error: e});
       }
-});
-router.route('/create/:roomid').get(async (req,res) => {
-  res.render('eventcreate',{room: req.params.roomid});
 })
 router.route('/event/:id').get(async (req, res) => {
     try {
