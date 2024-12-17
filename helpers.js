@@ -6,6 +6,14 @@ export const checkString = (data, name) =>
     return data.trim();
 };
 
+export const checkUsername = (data, name) =>
+  {
+      if(!data) throw  `${name} isn't a valid non-empty string`;
+      if(typeof data !== "string" || (data = data.trim()).length === 0) throw  `${name} isn't a valid non-empty string`;
+      if(data.includes(" ")) throw `${name} cannot include spaces`
+      return data.trim();
+  };
+
 export const checkArrayOfStrings = (data, name) =>
 {
     for(let string of data){
@@ -258,7 +266,7 @@ export const checkCreateUser =  (
         }
         if (!usersApproving) throw "No users approving array provided for the user";
         if (!notifications) throw "No notifications array provided for the user";
-        username = checkString(username, "Username");
+        username = checkUsername(username, "Username");
         if (username.length < 5 || username.length > 10) throw "Given username is incorrect length";
         userPassword = checkIsValidPassword(userPassword, 8);
         firstName = checkString(firstName, "First Name");
@@ -329,7 +337,7 @@ export const checkSignUpUser =  (
     if (!userPassword) throw "No password given";
     if (!firstName) throw "No first name given";
     if (!lastName) throw "No last name given";
-    username = checkString(username, "Given first name");
+    username = checkUsername(username, "Given first name");
     if (username.length < 5 || firstName.length > 10) throw "Given username is incorrect length, must be between 5-10 characters.";
     userPassword = checkIsValidPassword(userPassword, 8);
     firstName = checkString(firstName, "Given first name");
