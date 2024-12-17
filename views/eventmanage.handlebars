@@ -1,9 +1,12 @@
 
-<p id="eventInfo" eventid="{{_id}}" organizer="{{organizerID}}" eventname="{{name}}" currentuser = "{{currentuser}}">Event Name: {{name}},<br>
-Event Description: {{description}},<br>
-Start Date: {{startDate}},<br>
-End Date: {{endDate}},<br>
-Event Picture: {{picture}},<br>
+<p id="eventInfo" class="{{_id}}">Event Name: {{name}}<br>
+Event Description: {{description}}<br>
+Start Date: {{startDate}}<br>
+End Date: {{endDate}}<br>
+<img class="eventImage"
+                          alt="{{name}} Image"
+                          src="{{picture}}"
+                          ></p><br>
 Status: {{status}}</p>
 {{#if canRSVP}}
 {{#if hasRSVPed}}

@@ -79,17 +79,7 @@ export const updateUser = async (
     notifications
 ) => {
     id = helpers.checkIsValidID(id, "id");
-    let test = await helpers.checkCreateUser(username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
-    let newUser = {
-        username,
-        userPassword,
-        firstName,
-        lastName,
-        permissions,
-        beingGranted,
-        usersApproving,
-        notifications 
-    }
+    let newUser = await helpers.checkCreateUser(username, userPassword, firstName, lastName, permissions, beingGranted, usersApproving, notifications);
     const userCollection = await users();
     const updatedInfo = await userCollection.findOneAndUpdate(
         {_id: new ObjectId(id)},
@@ -105,6 +95,7 @@ export const patchUser = async (
     id,
     updateObject
 ) => {
+    id = helpers.checkIsValidID(id, "id");
     let originalUser = await getUserById(id);
     updateObject = helpers.checkPatchUser(id, originalUser, updateObject); //Changed to checkpatchuser
     let newUser = {
@@ -144,8 +135,13 @@ export const signUpUser = async (
     firstName,
     lastName,
   ) => {
-    if (username) username = username.toLowerCase();
+    if (username) username = username.toLowerCase().trim();
+    if (userPassword) userPassword = userPassword.trim();
+    if (firstName) firstName = firstName.trim();
+    if (lastName) lastName = lastName.trim();
     let testval = await helpers.checkSignUpUser(username, userPassword, firstName, lastName);
+    let saltRounds = 8;
+    userPassword = await bcrypt.hash(userPassword, saltRounds);
     let userCollection = await users();
     let dupeuser = await userCollection.findOne({username: username});
     if (dupeuser !== null) throw "Duplicate username was found, please use a different one.";
@@ -168,7 +164,8 @@ export const signUpUser = async (
   };
 
 export const signInUser = async (username, userPassword) => {
-    username = username.toLowerCase();
+    if (username) username = username.toLowerCase().trim();
+    if (userPassword) userPassword = userPassword.trim();
     let testval = await helpers.checkSignInUser(username, userPassword);
     let userCollection = await users();
     let user = await userCollection.findOne({username: username});
