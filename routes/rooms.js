@@ -17,6 +17,9 @@ router.route('/').get(async (req, res) => {
           if(room._id === event.roomID && !event.isPrivate) events.push(event.name + ": " + event.description);
         }
         room.events = events;
+        let isAdmin = false;
+        if(req.session.user.permissions >= 1) isAdmin = true;
+        room.isAdmin = isAdmin;
       }
       return res.render('./roomlist', {title: "Room List", rooms: roomList})
     } catch (e) {
@@ -62,7 +65,7 @@ router.route('/:id').get(async (req, res) => {
     }
     try {
         const room = await getRoomByID(req.params.id);
-        return res.render('roommmanage',room);
+        return res.render('roommanage',room);
     } catch (e) {
         return res.status(404).json(e);
     }
