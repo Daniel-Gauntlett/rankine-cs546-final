@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import * as helpers from '../helpers.js';
-import { createUser, getUserById, updateUser, removeUser, updateNotifications, patchUser, getAllUsers, signInUser, signUpUser } from '../data/users.js';
+import { createUser, getUserById, updateUser, removeUser, updateNotifications, patchUser, getAllUsers, signInUser, signUpUser, permissionsCheck } from '../data/users.js';
 const router = Router();
 import xss from 'xss';
 
@@ -136,7 +136,27 @@ router.route('/user/:id').get(async (req, res) => {
     } catch (e) {
         return res.status(404).json(e);
     }
-}).delete(async (req, res) => {
+}).post(async (req, res) => {
+  let body = null;
+  try{
+    Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
+    body = req.body;
+  }catch(e)
+  {
+    return res.status(404).json(e);
+  }
+  try{
+    req.params.id = xss(req.params.id);
+    let user = await getUserById(req.params.id)
+    let ua = user.usersApproving;
+    await permissionsCheck(req.session.user._id, user._id, ua, user.permissions);
+    res.render('./home');
+  }
+  catch(e){
+    return res.status(500).json(e);
+  }
+})
+.delete(async (req, res) => {
     try {
         req.params.id = xss(req.params.id);
         helpers.checkString(req.params.id, "ID");

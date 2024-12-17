@@ -46,7 +46,6 @@ export const getAllUsers = async () => {
     const userCollection = await users();
     let userList = await userCollection
         .find({})
-        .project({_id: 1, name: 1})
         .toArray();
     if (!userList) throw 'Could not get all users';
     for (let user of userList){
@@ -174,6 +173,7 @@ export const signInUser = async (username, userPassword) => {
     let truthval = await bcrypt.compare(userPassword, userPass);
     if (truthval){
       let userFields = {
+        _id: user._id,
         username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -189,7 +189,9 @@ export const permissionsCheck = async (adminId, userId, usersApproving, permissi
     if (!adminId) throw "No admin id given";
     if (!userId) throw "No user id given";
     if (!usersApproving) throw "No approving users given";
-    if (!permissions) throw "No permissions given";
+    if (permissions !== 0){
+        if (!permissions) throw "No permissions given";
+      }
     if (!Array.isArray(usersApproving)) throw "Given users approving list is not an array";
     for (let i = 0; i < usersApproving.length; i++){
         let testval = helpers.checkIsValidID(usersApproving[i], "Administrator Account ID");
@@ -199,13 +201,14 @@ export const permissionsCheck = async (adminId, userId, usersApproving, permissi
     adminId = helpers.checkIsValidID(adminId, "Admin ID");
     userId = helpers.checkIsValidID(userId, "User ID");
     usersApproving.push(adminId);
+    let test = null;
     if (usersApproving.length >= 2){
         permissions++;
         let obj = {
             permissions: permissions,
             usersApproving: []
         };
-        let test = patchUser(userId, obj);
+        test = patchUser(userId, obj);
     }
     return test;
 }
