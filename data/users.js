@@ -146,6 +146,8 @@ export const signUpUser = async (
   ) => {
     if (username) username = username.toLowerCase();
     let testval = await helpers.checkSignUpUser(username, userPassword, firstName, lastName);
+    let saltRounds = 8;
+    userPassword = await bcrypt.hash(userPassword, saltRounds);
     let userCollection = await users();
     let dupeuser = await userCollection.findOne({username: username});
     if (dupeuser !== null) throw "Duplicate username was found, please use a different one.";

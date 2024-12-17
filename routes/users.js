@@ -79,7 +79,7 @@ router
   })
   .post(async (req, res) => {
     Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
-    if(req.body.password != req.body.confirmPassword){
+    if(req.body.userPassword != req.body.confirmPassword){
       return res.status(400).render('signupuser',{error: "Passwords must match"});
     }
     try {
