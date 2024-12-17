@@ -55,6 +55,25 @@ router.route('/').get(async (req, res) => {
       }
 });
 
+router.route('/roomCreate').get(async (req, res) => {
+  res.render('roomCreate')
+}).post(async (req, res) => {
+  Object.keys(req.body).forEach((c) => req.body[c] = xss(req.body[c]));
+    try {
+      helpers.checkCreateRoom(req.body.building, req.body.roomNumber, req.body.roomCapacity, req.body.roomFeatures, req.body.unavailableTimesList, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png");
+    } catch (e) {
+      console.log(e);
+      return res.status(400).render('roomCreate',{error: e});
+    }
+    try {
+      helpers.createRoom(req.body.building, req.body.roomNumber, req.body.roomCapacity, req.body.roomFeatures, req.body.unavailableTimesList, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png");
+      res.redirect("/");
+    } catch (e) {
+      console.log(e);
+      res.status(400).render('roomCreate',{error: e});
+    }
+})
+
 router.route('/:id').get(async (req, res) => {
     try {
         req.params.id = xss(req.params.id);
