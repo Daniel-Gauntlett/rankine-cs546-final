@@ -6,7 +6,13 @@ export const constructorMethod = (app) => {
     app.use('/rooms',roomroutes);
     app.use('/users',userroutes);
     app.use("*",(req,res) => {
-        res.render("home");
+        let data = {};
+        if(req.session.user){
+            data.username = req.session.user.username;
+            data.isLoggedIn = true;
+            data.notifications = req.session.user.notifications;
+        }
+        res.render("home",);
     });
 };
 

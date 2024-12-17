@@ -1,5 +1,5 @@
 
-<p id="eventInfo" class="{{_id}}">Event Name: {{name}}<br>
+<p id="eventInfo" class="{{_id}}" eventid="{{_id}}" organizer="{{organizerID}}" eventname="{{name}}" currentuser = "{{currentuser}}">Event Name: {{name}}<br>
 Event Description: {{description}}<br>
 Start Date: {{startDate}}<br>
 End Date: {{endDate}}<br>
@@ -11,17 +11,17 @@ Status: {{status}}</p>
 {{#if canRSVP}}
 {{#if hasRSVPed}}
 <p>You've RSVPed for this event!</p>
-<form action="/events/{{_id}}/unrsvp" method="PATCH" id="unrsvp_form">
+<form action="/events/event/{{_id}}" method="GET" id="unrsvp_form">
     <button type="submit" name="rsvp_button" id="unrsvp_button">UnRSVP for this event</button>
 </form>
 {{else}}
-<form action="/events/{{_id}}/rsvp" method="PATCH" id="rsvp_form">
+<form action="/events/event/{{_id}}" method="GET" id="rsvp_form">
     <button type="submit" name="rsvp_button" id="rsvp_button">RSVP for this event</button>
 </form>
 {{/if}}
 {{/if}}
 {{#if canApprove}}
-<form action="/events/" method="PATCH" id="approve_form">
+<form action="/events/{{_id}}" method="PATCH" id="approve_form">
     <label for = "name">
         Approval:
         <input type="checkbox" id="approval-checkbox" name="approval">
@@ -31,7 +31,7 @@ Status: {{status}}</p>
 {{/if}}
 
 {{#if canEdit}}
-<form action="/events/" method="PATCH" id="patch-event-form">
+<form action="/events/{{_id}}" method="PATCH" id="patch-event-form">
     <label for = "name">
         Event Name:
         <input type="text" id="name" name = "name">
@@ -55,13 +55,23 @@ Status: {{status}}</p>
 {{/if}}
 
 {{#if canEdit}}
-<form action="/events/" method="DELETE" id="deleteEvent">
+<form action="/events/{{_id}}" method="DELETE" id="deleteEvent">
     <button type="submit" name="delete_button" id="delete_button">Delete Event</button>
 </form>
 {{/if}}
+
+{{#if hasStarted}}
+    <p>Attendees: </p>
+    {{#each attendeesList}}
+    {{/each}}
+    {{#each rsvpList}}
+
+    {{/each}}
+{{/if}}
+
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"
 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
 crossorigin="anonymous"></script>
-<script src="../public/js/ajax.js"></script>
+<script src="../../public/js/ajax.js"></script>
