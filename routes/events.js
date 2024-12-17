@@ -64,7 +64,7 @@ router.route('/').get(async (req, res) => {
       }
 });
 router.route('/create/:roomid').get(async (req,res) => {
-  res.render('/eventcreate',{room: req.params.roomid})
+  res.render('eventcreate',{room: req.params.roomid})
 })
 router.route('/event/:id').get(async (req, res) => {
     try {

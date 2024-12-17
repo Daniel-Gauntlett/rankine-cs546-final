@@ -1,6 +1,3 @@
-<form action="/events/" method="POST" class="bookRoom">
-		<button type="submit" name="booking_button" class="booking_button">Book This Room!</button>
-</form>
 {{#each rooms}}
     <p class = "room">Building: {{building}}
     <br>
@@ -26,7 +23,7 @@
                           alt="{{building}} {{roomNumber}} Image"
                           src="{{roomPicture}}"
                           ></p>
-    <form action="/events/" method="POST" class="bookRoom">
+    <form action="/events/create" method="GET" class="bookRoom" id="room_book_button" roomid="{{_id}}">
 		<button type="submit" name="booking_button" class="booking_button">Book This Room!</button>
 	  </form>
     <!--- Only show this if user is admin, maybe inject with Ajax? Should link to roommanage page for specific room ID-->
@@ -38,3 +35,9 @@
       </div>
     {{/if}}
 {{/each}}
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+crossorigin="anonymous"></script>
+<script src="../public/js/ajax.js"></script>

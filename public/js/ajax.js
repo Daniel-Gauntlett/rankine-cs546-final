@@ -5,10 +5,11 @@
     let approvalForm = $('#approve_form');
     let approvalCheckbox = $('#approval-checkbox');
     let eventInfo = $("#eventInfo");
-    let patchEventForm = $("patch-event-form");
-    let rsvp = $("rsvp_form");
-    let unrsvp = $("unrsvp_form");
-    let permissions = $("permissions-form");
+    let patchEventForm = $("#patch-event-form");
+    let rsvp = $("#rsvp_form");
+    let unrsvp = $("#unrsvp_form");
+    let permissions = $("#permissions-form");
+    let bookroom = $("#room_book_button");
     makeEventForm.submit(function (event) {
         event.preventDefault();
         let patch = {};
@@ -26,7 +27,11 @@
             url: '/events/',
             data: JSON.stringify(patch)
         };
-        $.ajax(requestConfig);
+        $.ajax(requestConfig).then(function (responseMessage) {
+            if (responseMessage.redirect) {
+                window.location.href = responseMessage.redirect;
+            }
+        });
     })
     recurringCheckbox.click(function (event) {
         recurringDateBox.toggle();
@@ -48,13 +53,21 @@
             url: '/events/event/' + eventInfo.attr("eventid"),
             data: JSON.stringify(patch)
         };
-        $.ajax(requestConfig);
+        $.ajax(requestConfig).then(function (responseMessage) {
+            if (responseMessage.redirect) {
+                window.location.href = responseMessage.redirect;
+            }
+        });
         requestConfig = {
             method: 'POST',
             url: '/users/notification/' + eventInfo.attr("organizer"),
             data: notif
         };
-        $.ajax(requestConfig); 
+        $.ajax(requestConfig).then(function (responseMessage) {
+            if (responseMessage.redirect) {
+                window.location.href = responseMessage.redirect;
+            }
+        }); 
     })
 
     patchEventForm.submit(function (event) {
@@ -70,7 +83,11 @@
             url: '/events/event/' + eventInfo.attr("eventid"),
             data: JSON.stringify(patch)
         };
-        $.ajax(requestConfig);
+        $.ajax(requestConfig).then(function (responseMessage) {
+            if (responseMessage.redirect) {
+                window.location.href = responseMessage.redirect;
+            }
+        });
     });
 
     rsvp.submit(function (event) {
@@ -82,7 +99,11 @@
             url: '/events/event/' + eventInfo.attr("eventid") + "/rsvp",
             data: JSON.stringify(newinfo)
         };
-        $.ajax(requestConfig);
+        $.ajax(requestConfig).then(function (responseMessage) {
+            if (responseMessage.redirect) {
+                window.location.href = responseMessage.redirect;
+            }
+        });
     });
 
     unrsvp.submit(function (event) {
@@ -94,7 +115,11 @@
             url: '/events/event/' + eventInfo.attr("eventid") + "/unrsvp",
             data: JSON.stringify(newinfo)
         };
-        $.ajax(requestConfig);
+        $.ajax(requestConfig).then(function (responseMessage) {
+            if (responseMessage.redirect) {
+                window.location.href = responseMessage.redirect;
+            }
+        });
     });
 
     permissions.submit(function (event) {
@@ -112,8 +137,42 @@
                 url: '/users/' + eventInfo.attr("thisuser"),
                 data: JSON.stringify(data)
             };
-            $.ajax(requestConfig);
+            $.ajax(requestConfig).then(function (responseMessage) {
+                if (responseMessage.redirect) {
+                    window.location.href = responseMessage.redirect;
+                }
+            });
         }
+    })
+
+    /*function bindEventsToButton(link)  {
+        link.on('submit', function (event) {
+            event.preventDefault();
+            let requestConfig = {
+                method: 'GET',
+                url: ('/events/create/' + bookroom.attr("roomid"))
+            };
+            $.ajax(requestConfig).then(function (responseMessage) {
+                console.log(responseMessage);
+                if (responseMessage.redirect) {
+                    window.location.href = responseMessage.redirect;
+                }
+            });
+        })
+    }*/
+
+    bookroom.submit(function (event) {
+        event.preventDefault();
+        let requestConfig = {
+            method: 'GET',
+            url: ('/events/create/' + bookroom.attr("roomid"))
+        };
+        $.ajax(requestConfig).then(function (responseMessage) {
+            console.log(responseMessage);
+            if (responseMessage.redirect) {
+                window.location.href = responseMessage.redirect;
+            }
+        });
     })
 
 })(window.jQuery);
