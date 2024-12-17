@@ -191,10 +191,11 @@ export const permissionsCheck = async (adminId, userId, usersApproving, permissi
     if (!usersApproving) throw "No approving users given";
     if (permissions !== 0){
         if (!permissions) throw "No permissions given";
-      }
+    }
     if (!Array.isArray(usersApproving)) throw "Given users approving list is not an array";
     for (let i = 0; i < usersApproving.length; i++){
         let testval = helpers.checkIsValidID(usersApproving[i], "Administrator Account ID");
+        if (adminId === usersApproving[i]) throw "Duplicate admin is trying to grant permissions";
     }
     if (permissions !== 0 && permissions !== 1 && permissions !== 2) throw "Permissions is not a valid integer";
     if (permissions === 2) throw "Permissions is already at the highest level";
