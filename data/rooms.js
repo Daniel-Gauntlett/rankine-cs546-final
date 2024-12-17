@@ -166,7 +166,20 @@ export const getRoomByFeatures = async (featureList) => {
   return roomMatches
 }
 
-
+export const getRoomByFeaturesAndCapacity = async(capacity, featureList) =>
+{
+  let roomsByFeatures = await getRoomByFeatures(featureList);
+  let roomsByCapacity = await getRoomByCapacity(capacity);
+  let roomsByCapacityAndFeatures = [];
+  for(let roomF of roomsByFeatures)
+  {
+    for(let roomC of roomsByCapacity)
+    {
+      if(roomC._id===roomF._id) roomsByCapacityAndFeatures.push(roomF);
+    }
+  }
+  return roomsByCapacityAndFeatures;
+}
 export const getAllRooms = async () => {
     const roomCollection = await rooms();
     let roomList = await roomCollection

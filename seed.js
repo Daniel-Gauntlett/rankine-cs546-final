@@ -48,8 +48,7 @@ try{
     room4 = await rooms.createRoom("Kidde", "360", 50, ["multiple Screens", "projectors"], 
         [], "https://freight.cargo.site/t/original/i/00f5be24e00f8444f50b7ec9faf3a0b02becf1e6665b0f0756440ec699f1ba71/Stevens-Tech._Auditorium_03.jpg");
     console.dir(room4, {depth:null});
-    console.dir(await rooms.getRoomByCapacity(30));
-    console.dir(await rooms.getRoomByFeatures(["Projectors"]))
+    console.dir(await rooms.getRoomByFeaturesAndCapacity(30, ["Projectors"]));
 }catch(e)
 {
     console.error(e);
