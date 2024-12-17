@@ -120,9 +120,9 @@ export const updateNotifications = async (
     id = helpers.checkIsValidID(id, "id");
     let originalUser = await getUserById(id);
     newNotification = helpers.checkString(newNotification, "Given notification");
-    let notifVal = originalUser.notifications.push(newNotification);
+    originalUser.notifications.push(newNotification);
     let notifObject = {
-        notifications: notifVal
+        notifications: originalUser.notifications
     };
     let value = patchUser(id, notifObject);
     return notifObject;

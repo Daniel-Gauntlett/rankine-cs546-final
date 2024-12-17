@@ -48,29 +48,21 @@
             patch.status = 0;
             notif.notiftext = "Your event " + eventInfo.attr("eventname") + " was denied.";
         }
-
         let requestConfig = {
             method: 'PATCH',
             url: '/events/event/' + eventInfo.attr("eventid"),
             data: JSON.stringify(patch),
             dataType: "json"
         };
-        $.ajax(requestConfig).then(function (responseMessage) {
-            if (responseMessage.redirect) {
-                window.location.href = responseMessage.redirect;
-            }
-        });
+        $.ajax(requestConfig);
         requestConfig = {
             method: 'POST',
             url: '/users/notification/' + eventInfo.attr("organizer"),
             data: notif,
             dataType: "json"
         };
-        $.ajax(requestConfig).then(function (responseMessage) {
-            if (responseMessage.redirect) {
-                window.location.href = responseMessage.redirect;
-            }
-        }); 
+        $.ajax(requestConfig); 
+        
     })
 
     patchEventForm.submit(function (event) {

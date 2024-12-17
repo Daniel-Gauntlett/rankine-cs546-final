@@ -327,7 +327,7 @@ export const checkPatchUser =  (
     if ('notifications' in updateObject){
       if (!Array.isArray(updateObject.notifications)) throw "Given users notifications list is not an array";
         for (let i = 0; i < updateObject.notifications.length; i++){
-          let testval = checkIsValidID(updateObject.notifications[i], "Notification");
+          let testval = checkString(updateObject.notifications[i], "Notification");
         }
     }
     return updateObject;
